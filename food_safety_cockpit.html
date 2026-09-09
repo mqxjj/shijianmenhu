@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>黑龙江省"互联网+AI监管"指挥中心 - 食品安全领导驾驶舱</title>
+<script src="market_regulation_scenarios_analysis/_shared/js/echarts.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#020a1e;color:#cfe6ff;}
+body{
+  background:
+    radial-gradient(ellipse at top center, rgba(10,60,140,0.55) 0%, rgba(2,10,30,0) 60%),
+    radial-gradient(ellipse at bottom center, rgba(5,30,90,0.45) 0%, rgba(2,10,30,0) 60%),
+    linear-gradient(180deg,#031433 0%,#020a1e 50%,#031433 100%);
+  position:relative;
+}
+body::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(60,160,255,0.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(60,160,255,0.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+/* ===== Header ===== */
+.header{
+  position:relative;height:72px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg, rgba(10,50,120,0.85) 0%, rgba(5,30,90,0.4) 60%, rgba(0,0,0,0) 100%);
+  border-bottom:1px solid rgba(60,160,255,0.25);
+  z-index:5;
+}
+.header::before,.header::after{
+  content:"";position:absolute;top:8px;width:22%;height:56px;pointer-events:none;
+}
+.header::before{
+  left:0;
+  background:linear-gradient(90deg, rgba(0,180,255,0.35) 0%, rgba(0,180,255,0) 100%);
+  clip-path:polygon(0 0, 100% 0, 85% 100%, 0 100%);
+}
+.header::after{
+  right:0;
+  background:linear-gradient(270deg, rgba(0,180,255,0.35) 0%, rgba(0,180,255,0) 100%);
+  clip-path:polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+}
+.header-title{
+  font-size:30px;font-weight:700;letter-spacing:8px;
+  background:linear-gradient(180deg,#ffffff 0%,#5ac8ff 60%,#2a8cff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 24px rgba(60,160,255,0.55);
+}
+.header .deco{
+  position:absolute;top:50%;transform:translateY(-50%);color:#5ac8ff;font-size:18px;letter-spacing:4px;
+}
+.header .deco.left{left:calc(50% - 360px);}
+.header .deco.right{right:calc(50% - 360px);}
+.header-info{
+  position:absolute;right:20px;top:18px;display:flex;gap:18px;align-items:center;font-size:13px;color:#9fc8ff;
+}
+.header-info .date{color:#cfe6ff;font-size:14px;}
+.search-box{
+  position:absolute;left:20px;top:18px;display:flex;gap:8px;align-items:center;
+}
+.search-box select, .search-box button{
+  background:rgba(10,40,90,0.7);border:1px solid rgba(60,160,255,0.4);color:#cfe6ff;
+  padding:5px 14px;font-size:13px;border-radius:2px;
+}
+.search-box button{
+  background:linear-gradient(180deg,#0f67d8 0%,#0a4ca0 100%);cursor:pointer;
+}
+
+/* ===== Main Layout ===== */
+.main{
+  display:grid;grid-template-columns:460px 1fr 480px;gap:16px;
+  padding:16px;height:calc(100vh - 72px);position:relative;z-index:2;
+}
+
+/* ===== Panel ===== */
+.panel{
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(15,50,120,0.35) 0%, rgba(5,20,60,0.15) 100%);
+  border:1px solid rgba(60,160,255,0.2);
+  padding:10px 12px;
+}
+.panel::before, .panel::after{
+  content:"";position:absolute;width:14px;height:14px;border:1.5px solid #28c4ff;pointer-events:none;
+}
+.panel::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+.panel::after{top:-1px;right:-1px;border-left:none;border-bottom:none;}
+.panel .corner-bl,.panel .corner-br{
+  position:absolute;width:14px;height:14px;border:1.5px solid #28c4ff;pointer-events:none;
+}
+.panel .corner-bl{bottom:-1px;left:-1px;border-right:none;border-top:none;}
+.panel .corner-br{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+.panel-title{
+  position:relative;display:flex;align-items:center;gap:8px;
+  font-size:16px;font-weight:600;color:#fff;letter-spacing:1px;
+  padding-bottom:8px;margin-bottom:10px;
+  background:linear-gradient(90deg, rgba(60,160,255,0.18) 0%, rgba(60,160,255,0) 100%);
+  padding:6px 10px;border-left:3px solid #28c4ff;
+}
+.panel-title .title-icon{
+  width:6px;height:6px;background:#28c4ff;border-radius:50%;
+  box-shadow:0 0 8px #28c4ff;
+}
+.panel-title .title-sub{
+  font-size:12px;font-weight:400;color:#5ac8ff;margin-left:auto;
+}
+
+/* Column layout */
+.col-left, .col-right{
+  display:flex;flex-direction:column;gap:16px;overflow:hidden;
+}
+.col-center{display:flex;flex-direction:column;overflow:hidden;}
+
+/* ===== Left: 主体类型统计 ===== */
+.sub-title{
+  display:flex;align-items:center;gap:6px;font-size:14px;color:#cfe6ff;margin-bottom:8px;
+}
+.sub-title::before{content:"●";color:#28c4ff;font-size:8px;}
+.sub-title .more{margin-left:auto;font-size:12px;color:#5ac8ff;cursor:pointer;}
+.sub-title .more:hover{color:#fff;}
+
+.entity-stats{display:flex;gap:12px;align-items:center;}
+.entity-stats .pie{width:120px;height:120px;flex-shrink:0;}
+.entity-stats .stats-list{flex:1;font-size:12px;}
+.entity-stats .stats-list .item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:3px 0;border-bottom:1px dashed rgba(60,160,255,0.15);
+}
+.entity-stats .stats-list .item:last-child{border-bottom:none;}
+.entity-stats .label{color:#9fc8ff;}
+.entity-stats .value{color:#fff;font-weight:500;margin:0 6px;}
+.entity-stats .pct{color:#28c4ff;}
+
+/* ===== 设备运行监测 ===== */
+.device-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.device-card{
+  background:linear-gradient(180deg, rgba(10,50,120,0.3) 0%, rgba(5,20,60,0.1) 100%);
+  border:1px solid rgba(60,160,255,0.2);
+  padding:10px;position:relative;overflow:hidden;
+}
+.device-card::after{
+  content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg, transparent, rgba(60,160,255,0.1), transparent);
+  animation:scan 4s infinite;
+}
+@keyframes scan{0%{left:-100%;}100%{left:100%;}}
+.device-card .dc-title{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:14px;color:#fff;margin-bottom:8px;
+}
+.device-card .dc-title .arrow{color:#28c4ff;font-size:12px;}
+.device-card .dc-rates{display:flex;gap:8px;margin-bottom:6px;}
+.device-card .dc-rate{
+  flex:1;text-align:center;padding:5px 0;background:rgba(60,160,255,0.08);
+  border:1px solid rgba(60,160,255,0.15);
+}
+.device-card .dc-rate .num{font-size:16px;font-weight:600;color:#fff;}
+.device-card .dc-rate .lbl{font-size:11px;color:#9fc8ff;}
+.device-card .dc-rating{font-size:11px;color:#5ac8ff;letter-spacing:2px;}
+
+/* ===== 核验通过进度 ===== */
+.verify-stats{display:flex;gap:10px;align-items:center;margin-bottom:8px;}
+.verify-stats .ring{width:90px;height:90px;flex-shrink:0;}
+.verify-stats .info{flex:1;display:flex;gap:14px;}
+.verify-stats .info .col{flex:1;}
+.verify-stats .info .col .lbl{font-size:12px;color:#9fc8ff;margin-bottom:4px;}
+.verify-stats .info .col .val{font-size:20px;font-weight:600;color:#fff;}
+.verify-stats .info .col .val .unit{font-size:12px;color:#5ac8ff;margin-left:4px;}
+
+.city-list{font-size:12px;max-height:100px;overflow:hidden;}
+.city-list .row{
+  display:flex;justify-content:space-between;padding:2px 0;
+  border-bottom:1px dashed rgba(60,160,255,0.12);
+}
+.city-list .row .k{color:#9fc8ff;}
+.city-list .row .v{color:#fff;font-weight:500;}
+
+/* ===== 区域接入排行 ===== */
+.rank-bar{height:130px;}
+
+/* ===== Map ===== */
+.map-wrap{position:relative;flex:1;display:flex;flex-direction:column;border:1px solid rgba(60,160,255,0.2);background:rgba(2,10,30,0.35);}
+.map-wrap::before,.map-wrap::after{
+  content:"";position:absolute;width:18px;height:18px;border:2px solid #28c4ff;pointer-events:none;z-index:3;
+}
+.map-wrap::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+.map-wrap::after{top:-1px;right:-1px;border-left:none;border-bottom:none;}
+.map-wrap .cb,.map-wrap .cr{position:absolute;width:18px;height:18px;border:2px solid #28c4ff;pointer-events:none;z-index:3;}
+.map-wrap .cb{bottom:-1px;left:-1px;border-right:none;border-top:none;}
+.map-wrap .cr{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+
+.map-header{
+  position:relative;display:flex;justify-content:space-between;align-items:center;
+  padding:8px 14px;background:linear-gradient(90deg, rgba(15,50,120,0.5) 0%, rgba(5,20,60,0.2) 100%);
+  border-bottom:1px solid rgba(60,160,255,0.2);
+}
+.map-header .mh-title{font-size:16px;font-weight:600;color:#fff;letter-spacing:1px;}
+.map-header .mh-tabs{display:flex;gap:2px;}
+.map-header .mh-tab{
+  padding:4px 14px;font-size:13px;color:#9fc8ff;cursor:pointer;
+  background:rgba(60,160,255,0.08);border:1px solid rgba(60,160,255,0.2);
+  transition:all .2s;
+}
+.map-header .mh-tab:hover{color:#fff;}
+.map-header .mh-tab.active{
+  background:linear-gradient(180deg,#0f67d8 0%,#0a4ca0 100%);color:#fff;
+  border-color:#28c4ff;box-shadow:0 0 10px rgba(40,196,255,0.3);
+}
+
+#mapChart{flex:1;width:100%;}
+
+/* ===== Right: 风险等级评价 ===== */
+.risk-levels{display:flex;gap:6px;margin-bottom:10px;}
+.risk-level{
+  flex:1;text-align:center;padding:8px 4px;
+  border:1px solid rgba(60,160,255,0.25);cursor:pointer;
+  transition:all .2s;
+}
+.risk-level:hover{transform:translateY(-2px);}
+.risk-level .rl-num{font-size:18px;font-weight:600;color:#fff;}
+.risk-level .rl-star{color:#ffb547;font-size:10px;letter-spacing:1px;}
+.risk-level.l1{background:linear-gradient(180deg, rgba(255,68,68,0.3) 0%, rgba(255,68,68,0.05) 100%);}
+.risk-level.l2{background:linear-gradient(180deg, rgba(255,181,71,0.3) 0%, rgba(255,181,71,0.05) 100%);}
+.risk-level.l3{background:linear-gradient(180deg, rgba(40,196,255,0.3) 0%, rgba(40,196,255,0.05) 100%);}
+
+.risk-body{display:flex;gap:12px;}
+.risk-body .donut{width:110px;height:110px;flex-shrink:0;}
+.risk-body .list{flex:1;font-size:12px;}
+.risk-body .list .row{
+  display:flex;align-items:center;gap:6px;padding:3px 0;
+  border-bottom:1px dashed rgba(60,160,255,0.12);
+}
+.risk-body .list .row .idx{
+  width:16px;height:16px;border-radius:50%;background:rgba(60,160,255,0.2);
+  display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#28c4ff;flex-shrink:0;
+}
+.risk-body .list .row:nth-child(1) .idx{background:#ff4444;color:#fff;}
+.risk-body .list .row:nth-child(2) .idx{background:#ffb547;color:#fff;}
+.risk-body .list .row:nth-child(3) .idx{background:#ffb547;color:#fff;}
+.risk-body .list .row .name{flex:1;color:#cfe6ff;}
+.risk-body .list .row .bar{width:60px;height:4px;background:rgba(60,160,255,0.15);}
+.risk-body .list .row .bar-fill{height:100%;background:linear-gradient(90deg,#28c4ff,#0078ff);}
+
+/* ===== 闭环处置效能 ===== */
+.closed-loop{display:flex;gap:10px;margin-bottom:10px;}
+.closed-loop .funnel{width:160px;height:120px;flex-shrink:0;}
+.closed-loop .stats{flex:1;display:flex;flex-direction:column;gap:8px;}
+.closed-loop .stats .row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:4px 8px;background:rgba(60,160,255,0.05);
+  border-left:3px solid #28c4ff;font-size:12px;
+}
+.closed-loop .stats .row .k{color:#9fc8ff;}
+.closed-loop .stats .row .v{color:#fff;font-weight:600;font-size:14px;}
+.closed-loop .stats .row .v .unit{font-size:11px;color:#5ac8ff;margin-left:3px;}
+.closed-loop .stats .row .v.highlight{font-size:24px;color:#28c4ff;}
+.closed-loop .stats .row .v.highlight .unit{font-size:12px;}
+.closed-loop .legend{display:flex;gap:14px;font-size:11px;color:#9fc8ff;margin-top:4px;}
+.closed-loop .legend .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+
+/* 积压高风险警 */
+.backlog-row{display:flex;gap:10px;}
+.backlog-card{
+  flex:1;padding:12px;background:rgba(60,160,255,0.05);
+  border:1px solid rgba(60,160,255,0.2);text-align:center;cursor:pointer;
+  transition:all .2s;
+}
+.backlog-card:hover{border-color:#28c4ff;box-shadow:0 0 12px rgba(40,196,255,0.3);}
+.backlog-card .bc-title{font-size:13px;color:#fff;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.backlog-card .bc-title .icon{
+  width:16px;height:16px;border-radius:50%;background:#ff4444;
+  display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff;
+}
+.backlog-card .bc-title .icon.orange{background:#ffb547;}
+.backlog-card .bc-value{font-size:20px;color:#cfe6ff;margin-bottom:4px;}
+.backlog-card .bc-value.empty{color:#5ac8ff;font-size:14px;}
+.backlog-card .bc-label{font-size:11px;color:#5ac8ff;}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:rgba(60,160,255,0.3);border-radius:2px;}
+
+/* City markers */
+.city-label{
+  position:absolute;color:#cfe6ff;font-size:12px;pointer-events:none;
+  transform:translate(-50%,-50%);white-space:nowrap;text-shadow:0 0 6px rgba(0,0,0,0.8);
+}
+.city-label .dot{
+  display:inline-block;width:6px;height:6px;background:#28c4ff;border-radius:50%;
+  box-shadow:0 0 8px #28c4ff;margin-right:4px;vertical-align:middle;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.4);}
+}
+
+/* tab highlight */
+.clickable{cursor:pointer;}
+.clickable:hover{color:#fff !important;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="deco left">◆ ◇ ◆</div>
+  <div class="header-title">黑龙江省 "互联网+AI监管" 指挥中心</div>
+  <div class="deco right">◆ ◇ ◆</div>
+  <div class="search-box">
+    <select><option>黑龙江省</option></select>
+    <button>查询</button>
+  </div>
+  <div class="header-info">
+    <span class="date" id="curDate">2026年8月4日 星期二</span>
+    <span class="date" id="curTime">--:--:--</span>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Left column -->
+  <div class="col-left">
+    <div class="panel" style="flex:1.1;">
+      <span class="corner-bl"></span><span class="corner-br"></span>
+      <div class="panel-title">
+        <span class="title-icon"></span>
+        企业接入与运行监测
+        <span class="title-sub">ENTERPRISE ACCESS</span>
+      </div>
+      <div class="sub-title">主体类型统计</div>
+      <div class="entity-stats">
+        <div id="pieEntity" class="pie"></div>
+        <div class="stats-list">
+          <div class="item"><span class="label">养老机构</span><span class="value">1012</span><span class="pct">2.46%</span></div>
+          <div class="item"><span class="label">其他</span><span class="value">292</span><span class="pct">0.71%</span></div>
+          <div class="item"><span class="label">机关食堂</span><span class="value">192</span><span class="pct">0.47%</span></div>
+          <div class="item"><span class="label">其他学校食堂</span><span class="value">123</span><span class="pct">0.30%</span></div>
+          <div class="item"><span class="label">医院食堂</span><span class="value">115</span><span class="pct">0.28%</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:20px;margin-top:8px;font-size:11px;color:#9fc8ff;">
+        <span>主体总数 <b style="color:#fff;font-size:15px;">41213</b></span>
+        <span>社会餐饮 <b style="color:#28c4ff;font-size:13px;">57.16%</b></span>
+        <span>普通食品 <b style="color:#ffb547;font-size:13px;">24.51%</b></span>
+        <span>其他类 <b style="color:#ff4444;font-size:13px;">4.4%</b></span>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:0.9;">
+      <span class="corner-bl"></span><span class="corner-br"></span>
+      <div class="panel-title">
+        <span class="title-icon"></span>
+        设备运行监测
+        <span class="title-sub">DEVICE MONITOR</span>
+      </div>
+      <div class="device-grid">
+        <div class="device-card clickable">
+          <div class="dc-title"><span>设备在线率</span><span class="arrow">❯</span></div>
+          <div class="dc-rates">
+            <div class="dc-rate"><div class="num">***</div><div class="lbl">在线设备</div></div>
+            <div class="dc-rate"><div class="num">***</div><div class="lbl">设备总数</div></div>
+          </div>
+          <div class="dc-rating">★ ★ ★ ★ ★</div>
+        </div>
+        <div class="device-card clickable">
+          <div class="dc-title"><span>设备出图率</span><span class="arrow">❯</span></div>
+          <div class="dc-rates">
+            <div class="dc-rate"><div class="num">***</div><div class="lbl">出图设备</div></div>
+            <div class="dc-rate"><div class="num">***</div><div class="lbl">设备总数</div></div>
+          </div>
+          <div class="dc-rating">★ ★ ★ ★ ★</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:1.15;">
+      <span class="corner-bl"></span><span class="corner-br"></span>
+      <div class="panel-title">
+        <span class="title-icon"></span>
+        核验通过进度
+        <span class="title-sub">VERIFICATION PROGRESS</span>
+      </div>
+      <div class="verify-stats">
+        <div id="ringVerify" class="ring"></div>
+        <div class="info">
+          <div class="col">
+            <div class="lbl">核验通过总数</div>
+            <div class="val">41213<span class="unit">家</span></div>
+          </div>
+          <div class="col">
+            <div class="lbl">推送主体总数</div>
+            <div class="val">54426<span class="unit">家</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sub-title" style="font-size:12px;margin-bottom:4px;">分地市统计</div>
+      <div class="city-list">
+        <div class="row"><span class="k">佳木斯市</span><span class="v">2,330</span></div>
+        <div class="row"><span class="k">鸡西市</span><span class="v">2,270</span></div>
+        <div class="row"><span class="k">双鸭山市</span><span class="v">1,803</span></div>
+        <div class="row"><span class="k">绥化市</span><span class="v">1,704</span></div>
+        <div class="row"><span class="k">鹤岗市</span><span class="v">1,691</span></div>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:1;">
+      <span class="corner-bl"></span><span class="corner-br"></span>
+      <div class="panel-title">
+        <span class="title-icon"></span>
+        区域接入排行
+        <span class="title-sub">REGION RANKING</span>
+      </div>
+      <div id="rankBar" class="rank-bar"></div>
+    </div>
+  </div>
+
+  <!-- Center: Map -->
+  <div class="col-center">
+    <div class="map-wrap">
+      <span class="cb"></span><span class="cr"></span>
+      <div class="map-header">
+        <div class="mh-title">黑龙江省食品安全AI+互联网监管地图</div>
+        <div class="mh-tabs">
+          <div class="mh-tab active clickable" onclick="switchTab(this,'city')">城市画像</div>
+          <div class="mh-tab clickable" onclick="switchTab(this,'enterprise')">企业画像</div>
+        </div>
+      </div>
+      <div id="mapChart"></div>
+    </div>
+  </div>
+
+  <!-- Right column -->
+  <div class="col-right">
+    <div class="panel" style="flex:1;">
+      <span class="corner-bl"></span><span class="corner-br"></span>
+      <div class="panel-title">
+        <span class="title-icon"></span>
+        风险感知与闭环处置
+        <span class="title-sub">RISK PERCEPTION</span>
+      </div>
+      <div class="sub-title">风险等级评价</div>
+      <div class="risk-levels">
+        <div class="risk-level l1 clickable" onclick="selectLevel(this,'一级')">
+          <div class="rl-num">一级风险</div>
+          <div class="rl-star">★ ★ ★</div>
+        </div>
+        <div class="risk-level l2 clickable" onclick="selectLevel(this,'二级')">
+          <div class="rl-num">二级风险</div>
+          <div class="rl-star">★ ★</div>
+        </div>
+        <div class="risk-level l3 clickable active" onclick="selectLevel(this,'三级')">
+          <div class="rl-num">三级风险</div>
+          <div class="rl-star">★</div>
+        </div>
+      </div>
+      <div class="risk-body">
+        <div id="riskDonut" class="donut"></div>
+        <div class="list">
+          <div class="row"><span class="idx">1</span><span class="name">齐齐哈尔市</span><div class="bar"><div class="bar-fill" style="width:95%"></div></div></div>
+          <div class="row"><span class="idx">2</span><span class="name">伊春市</span><div class="bar"><div class="bar-fill" style="width:80%"></div></div></div>
+          <div class="row"><span class="idx">3</span><span class="name">大庆市</span><div class="bar"><div class="bar-fill" style="width:72%"></div></div></div>
+          <div class="row"><span class="idx">4</span><span class="name">哈尔滨市</span><div class="bar"><div class="bar-fill" style="width:65%"></div></div></div>
+          <div class="row"><span class="idx">5</span><span class="name">鸡西市</span><div class="bar"><div class="bar-fill" style="width:58%"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:0.95;">
+      <span class="corner-bl"></span><span class="corner-br"></span>
+      <div class="panel-title">
+        <span class="title-icon"></span>
+        闭环处置效能
+        <span class="title-sub">CLOSED-LOOP EFFICIENCY</span>
+      </div>
+      <div class="sub-title">处置流程状态 <span class="more clickable" style="color:#28c4ff;" onclick="alert('业务流转规则说明')">查看业务流转规则 ›</span></div>
+      <div class="closed-loop">
+        <div id="funnelChart" class="funnel"></div>
+        <div class="stats">
+          <div class="row"><span class="k">今日完成率</span><span class="v highlight">100.00<span class="unit">%</span></span></div>
+          <div class="row"><span class="k">近7日平均时长</span><span class="v">--<span class="unit">小时</span></span></div>
+        </div>
+      </div>
+      <div class="closed-loop" style="flex-direction:column;gap:4px;">
+        <div class="row" style="background:rgba(255,68,68,0.08);border-left-color:#ff4444;">
+          <span class="k">处置效能红黑榜</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:4px;">
+          <div style="flex:1;padding:8px;background:rgba(255,68,68,0.06);border:1px solid rgba(255,68,68,0.2);text-align:center;font-size:12px;">
+            <div style="color:#ff4444;font-weight:600;">🔥 平均处置时长红榜</div>
+            <div style="color:#5ac8ff;margin-top:4px;">暂无数据</div>
+          </div>
+          <div style="flex:1;padding:8px;background:rgba(40,196,255,0.06);border:1px solid rgba(40,196,255,0.2);text-align:center;font-size:12px;">
+            <div style="color:#28c4ff;font-weight:600;">⭐ 平均处置时长黑榜</div>
+            <div style="color:#5ac8ff;margin-top:4px;">暂无数据</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:0.9;">
+      <span class="corner-bl"></span><span class="corner-br"></span>
+      <div class="panel-title">
+        <span class="title-icon"></span>
+        积压高风险警监测
+        <span class="title-sub">HIGH-RISK BACKLOG</span>
+      </div>
+      <div class="backlog-row">
+        <div class="backlog-card">
+          <div class="bc-title"><span class="icon">警</span>积压告警总数</div>
+          <div class="bc-value empty">暂无数据</div>
+          <div class="bc-label">较昨日 --</div>
+        </div>
+        <div class="backlog-card">
+          <div class="bc-title"><span class="icon orange">高</span>高风险警</div>
+          <div class="bc-value empty">暂无数据</div>
+          <div class="bc-label">较昨日 --</div>
+        </div>
+        <div class="backlog-card">
+          <div class="bc-title"><span class="icon">警</span>处置率</div>
+          <div class="bc-value empty">暂无数据</div>
+          <div class="bc-label">目标 100%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ====== Clock ======
+function updateClock(){
+  const d = new Date();
+  const weeks = ['日','一','二','三','四','五','六'];
+  document.getElementById('curDate').textContent =
+    `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${weeks[d.getDay()]}`;
+  document.getElementById('curTime').textContent =
+    `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+}
+updateClock(); setInterval(updateClock,1000);
+
+// ====== Pie: entity types ======
+const pieEntity = echarts.init(document.getElementById('pieEntity'));
+pieEntity.setOption({
+  tooltip:{trigger:'item',backgroundColor:'rgba(5,20,60,0.9)',borderColor:'#28c4ff',textStyle:{color:'#fff',fontSize:12}},
+  legend:{show:false},
+  series:[{
+    type:'pie',radius:['45%','75%'],center:['50%','50%'],
+    avoidLabelOverlap:true,
+    itemStyle:{borderColor:'#020a1e',borderWidth:2},
+    label:{
+      show:true,formatter:'{b}\n{c}',color:'#cfe6ff',fontSize:11,
+      position:'outside',distanceToLabelLine:4
+    },
+    labelLine:{lineStyle:{color:'#5ac8ff'},length:8,length2:6},
+    data:[
+      {value:23565,name:'社会餐饮',itemStyle:{color:'#28c4ff'}},
+      {value:10102,name:'普通食品',itemStyle:{color:'#ffb547'}},
+      {value:1815,name:'其他类',itemStyle:{color:'#ff4444'}},
+      {value:1012,name:'养老机构',itemStyle:{color:'#7a5bff'}},
+      {value:292,name:'其他',itemStyle:{color:'#4fd9b5'}},
+      {value:192,name:'机关食堂',itemStyle:{color:'#e85ca8'}},
+      {value:238,name:'学校+医院',itemStyle:{color:'#56c2ff'}}
+    ]
+  }]
+});
+
+// ====== Ring: verify ======
+const ringVerify = echarts.init(document.getElementById('ringVerify'));
+ringVerify.setOption({
+  series:[{
+    type:'pie',radius:['60%','82%'],center:['50%','50%'],
+    silent:true,label:{show:true,position:'center',
+      formatter:'{d}%\n核验通过率',color:'#fff',fontSize:12,lineHeight:18
+    },
+    data:[
+      {value:75.70,name:'通过',itemStyle:{color:'#28c4ff'}},
+      {value:24.30,name:'未通过',itemStyle:{color:'rgba(60,160,255,0.15)'}}
+    ]
+  }]
+});
+
+// ====== Risk donut ======
+const riskDonut = echarts.init(document.getElementById('riskDonut'));
+riskDonut.setOption({
+  tooltip:{trigger:'item',backgroundColor:'rgba(5,20,60,0.9)',borderColor:'#28c4ff',textStyle:{color:'#fff',fontSize:12}},
+  series:[{
+    type:'pie',radius:['45%','75%'],center:['50%','50%'],
+    itemStyle:{borderColor:'#020a1e',borderWidth:2},
+    label:{
+      show:true,position:'center',
+      formatter:'告警总数',color:'#cfe6ff',fontSize:13,
+      distanceToLabelLine:0
+    },
+    labelLine:{show:false},
+    data:[
+      {value:45,name:'一级',itemStyle:{color:'#ff4444'}},
+      {value:128,name:'二级',itemStyle:{color:'#ffb547'}},
+      {value:320,name:'三级',itemStyle:{color:'#28c4ff'}},
+      {value:95,name:'提示',itemStyle:{color:'#7a5bff'}},
+      {value:52,name:'关注',itemStyle:{color:'#4fd9b5'}}
+    ]
+  }]
+});
+
+// ====== Funnel ======
+const funnelChart = echarts.init(document.getElementById('funnelChart'));
+funnelChart.setOption({
+  tooltip:{trigger:'item',backgroundColor:'rgba(5,20,60,0.9)',borderColor:'#28c4ff',textStyle:{color:'#fff',fontSize:12}},
+  series:[{
+    type:'funnel',top:10,left:0,right:0,bottom:10,width:'100%',
+    sort:'descending',gap:2,
+    label:{show:true,position:'inside',color:'#fff',fontSize:11,fontWeight:600},
+    labelLine:{show:false},
+    itemStyle:{borderColor:'rgba(40,196,255,0.3)',borderWidth:1},
+    data:[
+      {value:80,name:'待处理',itemStyle:{color:'#ff4444'}},
+      {value:60,name:'处理中',itemStyle:{color:'#ffb547'}},
+      {value:95,name:'今日已完成',itemStyle:{color:'#28c4ff'}}
+    ]
+  }]
+});
+
+// ====== Rank bar ======
+const rankBar = echarts.init(document.getElementById('rankBar'));
+rankBar.setOption({
+  grid:{left:70,right:20,top:10,bottom:24},
+  tooltip:{trigger:'axis',backgroundColor:'rgba(5,20,60,0.9)',borderColor:'#28c4ff',textStyle:{color:'#fff',fontSize:12}},
+  legend:{
+    show:true,bottom:0,textStyle:{color:'#9fc8ff',fontSize:10},
+    itemWidth:10,itemHeight:6,icon:'rect',
+    data:['接入主体总数','接入设备总数']
+  },
+  xAxis:{
+    type:'value',
+    axisLine:{lineStyle:{color:'rgba(60,160,255,0.2)'}},
+    splitLine:{lineStyle:{color:'rgba(60,160,255,0.08)'}},
+    axisLabel:{color:'#9fc8ff',fontSize:10}
+  },
+  yAxis:{
+    type:'category',
+    data:['大兴安岭地区','伊春市','七台河市','鹤岗市','绥化市','双鸭山市','鸡西市','佳木斯市','大庆市','牡丹江市','黑河市','齐齐哈尔市'],
+    axisLine:{lineStyle:{color:'rgba(60,160,255,0.2)'}},
+    axisLabel:{color:'#9fc8ff',fontSize:10,align:'right',width:60,overflow:'truncate'}
+  },
+  series:[
+    {
+      name:'接入主体总数',type:'bar',barWidth:5,
+      itemStyle:{color:new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'#0a4ca0'},{offset:1,color:'#28c4ff'}])},
+      data:[320,480,620,780,1100,1300,1600,1900,2200,2500,3100,3500]
+    },
+    {
+      name:'接入设备总数',type:'bar',barWidth:5,
+      itemStyle:{color:new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'#1a6b3a'},{offset:1,color:'#4fd9b5'}])},
+      data:[280,420,550,700,980,1180,1450,1720,2000,2300,2850,3200]
+    }
+  ]
+});
+
+// ====== Map ======
+const mapChart = echarts.init(document.getElementById('mapChart'));
+const baseOption = {
+  backgroundColor:'transparent',
+  title:{show:false}
+};
+
+const cityData = [
+  {name:'哈尔滨市',value:420,coord:[126.66,45.75]},
+  {name:'齐齐哈尔市',value:380,coord:[123.97,47.35]},
+  {name:'大庆市',value:350,coord:[125.12,46.46]},
+  {name:'牡丹江市',value:320,coord:[129.59,44.58]},
+  {name:'佳木斯市',value:310,coord:[130.35,46.8]},
+  {name:'绥化市',value:290,coord:[126.96,46.63]},
+  {name:'伊春市',value:270,coord:[128.87,47.72]},
+  {name:'双鸭山市',value:250,coord:[131.15,46.63]},
+  {name:'鸡西市',value:240,coord:[130.96,45.3]},
+  {name:'鹤岗市',value:220,coord:[130.28,47.35]},
+  {name:'七台河市',value:180,coord:[131.0,45.77]},
+  {name:'黑河市',value:200,coord:[127.55,50.24]},
+  {name:'大兴安岭地区',value:150,coord:[124.71,52.33]},
+  {name:'松嫩平原',value:100,coord:[125.5,47.5]},
+  {name:'三江平原',value:80,coord:[131.0,47.5]}
+];
+
+function renderMap(geoJson){
+  echarts.registerMap('heilongjiang',geoJson);
+
+  const option = {
+    backgroundColor:'transparent',
+    tooltip:{
+      trigger:'item',
+      backgroundColor:'rgba(5,20,60,0.9)',
+      borderColor:'#28c4ff',
+      textStyle:{color:'#fff',fontSize:12},
+      formatter: function(p){
+        if(p.seriesType === 'effectScatter'){
+          return `<b>${p.name}</b><br/>接入主体: ${p.value[2]||'--'}`;
+        }
+        if(p.seriesType === 'map'){
+          return `<b>${p.name}</b><br/>区域画像`;
+        }
+        return p.name;
+      }
+    },
+    visualMap:{
+      show:false,
+      min:0,max:500,
+      inRange:{color:['#0a4ca0','#28c4ff','#ffb547','#ff4444']}
+    },
+    geo:{
+      map:'heilongjiang',
+      roam:false,
+      zoom:1.15,
+      center:[127.5,47.5],
+      label:{
+        show:true,color:'#cfe6ff',fontSize:11,
+        fontWeight:500,
+        textShadowColor:'rgba(0,0,0,0.8)',textShadowBlur:4
+      },
+      itemStyle:{
+        areaColor:'rgba(10,50,120,0.5)',
+        borderColor:'rgba(60,160,255,0.5)',
+        borderWidth:1,
+        shadowColor:'rgba(40,196,255,0.4)',
+        shadowBlur:15,
+        shadowOffsetY:5
+      },
+      emphasis:{
+        label:{color:'#fff',fontSize:13,fontWeight:600},
+        itemStyle:{
+          areaColor:'rgba(40,196,255,0.25)',
+          borderColor:'#28c4ff',
+          borderWidth:2,
+          shadowBlur:25
+        }
+      }
+    },
+    series:[
+      {
+        name:'接入主体',
+        type:'effectScatter',
+        coordinateSystem:'geo',
+        data: cityData.map(c=>({
+          name:c.name,
+          value:[...c.coord,c.value]
+        })),
+        symbolSize: function(val){ return Math.max(8, val[2]/35); },
+        showEffectOn:'render',
+        rippleEffect:{brushType:'stroke',scale:3},
+        itemStyle:{
+          color:'#28c4ff',
+          shadowBlur:10,shadowColor:'#28c4ff'
+        },
+        label:{
+          show:true,position:'right',
+          formatter:'{b}',color:'#fff',fontSize:11,
+          textBorderColor:'#020a1e',textBorderWidth:3
+        },
+        zlevel:2
+      },
+      {
+        name:'汇聚线',
+        type:'lines',
+        coordinateSystem:'geo',
+        zlevel:1,
+        effect:{
+          show:true,period:4,trailLength:0.3,symbol:'arrow',symbolSize:6,color:'#ffb547'
+        },
+        lineStyle:{
+          color:'#ffb547',width:1,opacity:0.5,curveness:0.3
+        },
+        data:[
+          {coords:[[126.66,45.75],[123.97,47.35]]},
+          {coords:[[126.66,45.75],[125.12,46.46]]},
+          {coords:[[126.66,45.75],[129.59,44.58]]},
+          {coords:[[126.66,45.75],[130.35,46.8]]},
+          {coords:[[126.66,45.75],[128.87,47.72]]},
+          {coords:[[126.66,45.75],[130.96,45.3]]},
+          {coords:[[126.66,45.75],[127.55,50.24]]},
+          {coords:[[123.97,47.35],[125.12,46.46]]},
+          {coords:[[123.97,47.35],[130.35,46.8]]},
+          {coords:[[130.35,46.8],[130.96,45.3]]}
+        ]
+      },
+      {
+        name:'数据中心',
+        type:'effectScatter',
+        coordinateSystem:'geo',
+        data:[{name:'黑龙江',value:[126.66,45.75,41206]}],
+        symbolSize:28,
+        itemStyle:{color:'#ffb547',shadowBlur:20,shadowColor:'#ffb547'},
+        label:{
+          show:true,position:'center',
+          formatter:'{b}\n41206家',
+          color:'#fff',fontSize:13,fontWeight:600,
+          lineHeight:18,
+          textShadowColor:'#020a1e',textShadowBlur:6
+        },
+        zlevel:3
+      }
+    ]
+  };
+
+  mapChart.setOption(option);
+}
+
+// Load the real Heilongjiang GeoJSON from Aliyun DataV CDN
+const geoUrls = [
+  'https://geo.datav.aliyun.com/areas_v3/bound/230000_full.json',
+  'https://geo.datav.aliyun.com/areas_v3/bound/230000.json'
+];
+function loadGeo(){
+  let i = 0;
+  function tryNext(){
+    if(i >= geoUrls.length){
+      // fallback: show a simple placeholder
+      mapChart.setOption({
+        title:{show:true,text:'黑龙江省地图数据加载失败，请检查网络连接',left:'center',top:'center',textStyle:{color:'#ff4444',fontSize:14}}
+      });
+      return;
+    }
+    fetch(geoUrls[i])
+      .then(r=>r.json())
+      .then(data=>{
+        if(data && (data.features || data.type)){
+          renderMap(data);
+        } else {
+          i++; tryNext();
+        }
+      })
+      .catch(()=>{i++;tryNext();});
+  }
+  tryNext();
+}
+loadGeo();
+
+// ====== Interactions ======
+function switchTab(el,type){
+  document.querySelectorAll('.mh-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const title = el.textContent.trim();
+  document.querySelector('.map-header .mh-title').textContent =
+    `黑龙江省食品安全AI+互联网监管地图 · ${title}`;
+}
+
+function selectLevel(el,level){
+  document.querySelectorAll('.risk-level').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Resize
+window.addEventListener('resize',()=>{
+  pieEntity.resize();
+  ringVerify.resize();
+  riskDonut.resize();
+  funnelChart.resize();
+  rankBar.resize();
+  mapChart.resize();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>法治·水电气收费智管 - 领导驾驶舱</title>
+<script src="market_regulation_scenarios_analysis/_shared/js/echarts.min.js"></script>
+<script src="market_regulation_scenarios_analysis/_shared/js/echarts-gl.min.js" onload="window.__glReady=true"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow:hidden; font-family:"Microsoft YaHei","PingFang SC",sans-serif; background:#020a1e; color:#cfe6ff; }
+  body {
+    background:
+      radial-gradient(ellipse at top center, rgba(10,60,140,0.55) 0%, rgba(2,10,30,0) 60%),
+      radial-gradient(ellipse at bottom center, rgba(5,30,90,0.45) 0%, rgba(2,10,30,0) 60%),
+      linear-gradient(180deg, #031433 0%, #020a1e 50%, #031433 100%);
+    position:relative;
+  }
+  body::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(60,160,255,0.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(60,160,255,0.05) 1px,transparent 1px);
+    background-size:40px 40px;
+  }
+  /* ===== Header ===== */
+  .header{
+    position:relative;height:72px;display:flex;align-items:center;justify-content:center;
+    background:
+      linear-gradient(180deg, rgba(10,50,120,0.85) 0%, rgba(5,30,90,0.4) 60%, rgba(0,0,0,0) 100%);
+    border-bottom:1px solid rgba(60,160,255,0.25);
+    z-index:5;
+  }
+  .header::before,.header::after{
+    content:"";position:absolute;top:8px;width:22%;height:56px;pointer-events:none;
+  }
+  .header::before{
+    left:0;
+    background:linear-gradient(90deg, rgba(0,180,255,0.35) 0%, rgba(0,180,255,0) 100%);
+    clip-path:polygon(0 0, 100% 0, 85% 100%, 0 100%);
+  }
+  .header::after{
+    right:0;
+    background:linear-gradient(270deg, rgba(0,180,255,0.35) 0%, rgba(0,180,255,0) 100%);
+    clip-path:polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .header-title{
+    font-size:34px;font-weight:700;letter-spacing:8px;
+    background:linear-gradient(180deg,#ffffff 0%,#5ac8ff 60%,#2a8cff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 24px rgba(60,160,255,0.55);
+    padding:0 120px;
+    position:relative;z-index:2;
+  }
+  .header-deco-left,.header-deco-right{
+    position:absolute;top:50%;transform:translateY(-50%);width:220px;height:4px;
+    background:linear-gradient(90deg,transparent,#00c6ff,#0072ff,transparent);
+    opacity:0.7;
+  }
+  .header-deco-left{ left:calc(50% - 360px); }
+  .header-deco-right{ right:calc(50% - 360px); transform:translateY(-50%) scaleX(-1); }
+  .region-select{
+    position:absolute;right:24px;top:50%;transform:translateY(-50%);
+    padding:6px 18px;border:1px solid rgba(90,200,255,0.5);
+    background:linear-gradient(135deg,rgba(10,50,120,0.6),rgba(20,80,160,0.4));
+    color:#e0f0ff;font-size:14px;cursor:pointer;border-radius:2px;
+    display:flex;align-items:center;gap:6px;z-index:3;
+  }
+  .region-select:hover{ box-shadow:0 0 12px rgba(90,200,255,0.6); }
+  .region-select::after{ content:"▼"; font-size:10px; opacity:0.8; }
+
+  /* ===== Layout ===== */
+  .main{
+    display:grid;grid-template-columns:27% 46% 27%;gap:10px;
+    height:calc(100% - 72px);padding:10px;position:relative;z-index:2;
+  }
+  .col{ display:flex;flex-direction:column;gap:12px;min-height:0; }
+  .col-center{ display:flex;flex-direction:column;gap:12px;min-height:0; }
+
+  /* ===== Panel ===== */
+  .panel{
+    position:relative;background:linear-gradient(180deg,rgba(8,32,80,0.55) 0%,rgba(5,20,55,0.7) 100%);
+    border:1px solid rgba(60,140,230,0.35);
+    backdrop-filter:blur(2px);
+    display:flex;flex-direction:column;min-height:0;flex:1;
+  }
+  .panel::before,.panel::after{
+    content:"";position:absolute;width:14px;height:14px;border:2px solid #00d4ff;pointer-events:none;
+  }
+  .panel::before{ top:-1px;left:-1px;border-right:none;border-bottom:none; }
+  .panel::after{ bottom:-1px;right:-1px;border-left:none;border-top:none; }
+  .panel-corner-tr,.panel-corner-bl{
+    position:absolute;width:14px;height:14px;border:2px solid #00d4ff;pointer-events:none;
+  }
+  .panel-corner-tr{ top:-1px;right:-1px;border-left:none;border-bottom:none; }
+  .panel-corner-bl{ bottom:-1px;left:-1px;border-right:none;border-top:none; }
+
+  .panel-title{
+    display:flex;align-items:center;gap:8px;padding:8px 14px;
+    background:linear-gradient(90deg,rgba(0,120,220,0.35) 0%,rgba(0,80,180,0.15) 60%,transparent 100%);
+    border-bottom:1px solid rgba(60,140,230,0.25);
+    flex-shrink:0;
+  }
+  .panel-title-icon{
+    width:4px;height:16px;background:linear-gradient(180deg,#00eaff,#0066ff);box-shadow:0 0 8px #00aaff;
+  }
+  .panel-title-text{
+    font-size:16px;font-weight:700;color:#e8f4ff;letter-spacing:2px;
+    text-shadow:0 0 8px rgba(90,200,255,0.5);
+  }
+  .panel-title-deco{
+    flex:1;height:10px;margin-left:6px;position:relative;overflow:hidden;
+  }
+  .panel-title-deco::before{
+    content:"";position:absolute;left:0;top:40%;width:100%;height:2px;
+    background:linear-gradient(90deg,rgba(90,200,255,0.7),rgba(90,200,255,0));
+    -webkit-mask:linear-gradient(90deg,#000 0%,#000 50%,transparent 100%);mask:linear-gradient(90deg,#000,#000 50%,transparent);
+  }
+  .panel-body{ flex:1;padding:10px 12px;overflow:hidden;min-height:0;display:flex;flex-direction:column;gap:8px; }
+
+  /* ===== Tabs ===== */
+  .tabs{ display:flex;gap:4px;flex-shrink:0; }
+  .tab{
+    padding:4px 14px;font-size:12px;color:#9ec8ef;cursor:pointer;
+    background:rgba(20,60,130,0.35);border:1px solid rgba(60,140,230,0.35);
+    transition:all 0.25s;
+  }
+  .tab:hover{ color:#fff;background:rgba(0,150,255,0.3); }
+  .tab.active{
+    color:#fff;background:linear-gradient(180deg,#0099ff,#0055cc);
+    border-color:#00ccff;box-shadow:0 0 10px rgba(0,180,255,0.6);
+  }
+
+  /* ===== Stat Grid ===== */
+  .stat-grid{ display:grid;grid-template-columns:1fr 1fr;gap:7px; }
+  .stat-card{
+    position:relative;padding:8px 10px;
+    background:linear-gradient(135deg,rgba(15,55,120,0.6) 0%,rgba(8,30,80,0.6) 100%);
+    border:1px solid rgba(60,140,230,0.35);cursor:pointer;transition:all 0.25s;
+    display:flex;align-items:center;gap:8px;overflow:hidden;
+  }
+  .stat-card:hover{ border-color:#00ccff; box-shadow:0 0 16px rgba(0,180,255,0.5); transform:translateY(-1px); }
+  .stat-icon{
+    width:34px;height:34px;flex-shrink:0;border-radius:4px;
+    background:radial-gradient(circle,rgba(0,170,255,0.4) 0%,rgba(0,80,200,0.15) 70%);
+    border:1px solid rgba(0,200,255,0.5);
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+  }
+  .stat-info{ flex:1;min-width:0;overflow:hidden; }
+  .stat-label{ font-size:11px;color:#9ec8ef;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .stat-value{ font-size:16px;font-weight:700;color:#00eaff;text-shadow:0 0 8px rgba(0,234,255,0.6);white-space:nowrap; }
+  .stat-value .unit{ font-size:11px;color:#7ab4e6;margin-left:2px;font-weight:400; }
+  .stat-enter{ font-size:10px;color:#00d4ff;margin-top:1px;white-space:nowrap; }
+  .stat-enter::after{ content:" ▶"; font-size:9px; opacity:0.8; }
+
+  /* ===== Top Center Indicators ===== */
+  .top-indicators{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex-shrink:0;padding:4px 0;
+  }
+  .indicator{
+    position:relative;padding:8px 12px;
+    background:linear-gradient(180deg,rgba(10,50,120,0.55),rgba(5,25,70,0.55));
+    border:1px solid rgba(60,140,230,0.35);
+    display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.25s;
+  }
+  .indicator:hover{ border-color:#00ccff; box-shadow:0 0 14px rgba(0,180,255,0.4); }
+  .indicator::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg,#00eaff,#0066ff);
+  }
+  .indicator-icon{
+    width:40px;height:40px;border-radius:8px;flex-shrink:0;
+    background:linear-gradient(135deg,rgba(0,120,220,0.6),rgba(0,60,160,0.4));
+    border:1px solid rgba(90,200,255,0.6);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 0 0 12px rgba(0,180,255,0.3);
+  }
+  .indicator-info{ flex:1;min-width:0;overflow:hidden; }
+  .indicator-name{ font-size:11px;color:#9ec8ef;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .indicator-values{ display:flex;align-items:baseline;gap:6px; }
+  .indicator-main{ font-size:20px;font-weight:700;color:#fff;text-shadow:0 0 10px rgba(90,200,255,0.6);white-space:nowrap; }
+  .indicator-main .small{ font-size:12px;color:#9ec8ef;font-weight:400;margin:0 2px; }
+  .indicator-sub{ font-size:11px;color:#7ab4e6; }
+
+  /* ===== Rate Bar ===== */
+  .rates{ display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0; }
+  .rate-item{
+    position:relative;padding:7px 8px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(15,55,120,0.5),rgba(8,30,80,0.5));
+    border:1px solid rgba(60,140,230,0.35);
+    display:flex;align-items:center;gap:8px;cursor:pointer;transition:all 0.25s;
+  }
+  .rate-item:hover{ border-color:#00eaff; box-shadow:0 0 14px rgba(0,234,255,0.4); }
+  .rate-icon{
+    width:32px;height:32px;border-radius:50%;flex-shrink:0;
+    background:radial-gradient(circle,rgba(0,200,255,0.5),rgba(0,80,180,0.2));
+    border:1px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#00eaff;font-size:12px;
+  }
+  .rate-info{ flex:1;min-width:0;overflow:hidden; }
+  .rate-name{ font-size:10px;color:#9ec8ef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .rate-value{ font-size:14px;font-weight:700;color:#fff;white-space:nowrap; }
+  .rate-target{ font-size:10px;color:#00eaff;margin-top:1px;white-space:nowrap; }
+  .rate-flag{ position:absolute;top:-1px;left:8px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #ffcc00; }
+
+  /* ===== Alert Bar ===== */
+  .alert-bar{
+    display:flex;align-items:center;gap:14px;padding:8px 14px;flex-shrink:0;
+    background:linear-gradient(90deg,rgba(200,40,60,0.25) 0%,rgba(200,40,60,0.12) 40%,rgba(120,40,60,0.15) 100%);
+    border:1px solid rgba(255,120,120,0.4);
+    position:relative;overflow:hidden;
+  }
+  .alert-bar::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#ff4d4d,#cc0000);
+  }
+  .alert-icon{ color:#ff6666;font-size:16px; }
+  .alert-text{ flex:1;font-size:13px;color:#ffdede;letter-spacing:0.5px; }
+  .alert-text b{ color:#fff; }
+  .alert-tag{
+    padding:2px 10px;font-size:12px;color:#fff;background:rgba(220,60,60,0.8);
+    border:1px solid rgba(255,150,150,0.5);
+  }
+  .alert-time{ font-size:12px;color:#ffb3b3; }
+  .alert-btn{
+    padding:3px 12px;font-size:12px;color:#fff;cursor:pointer;
+    background:linear-gradient(180deg,#e63946,#9d1c2a);
+    border:1px solid rgba(255,150,150,0.6);transition:all 0.2s;
+  }
+  .alert-btn:hover{ box-shadow:0 0 10px rgba(255,80,80,0.7); }
+
+  /* ===== Map Area ===== */
+  .map-wrap{
+    flex:1;position:relative;min-height:0;border:1px solid rgba(60,140,230,0.25);
+    background:
+      radial-gradient(ellipse at center 60%, rgba(0,110,220,0.22) 0%, rgba(0,0,0,0) 60%),
+      linear-gradient(180deg,rgba(5,25,65,0.6),rgba(2,12,40,0.6));
+    display:flex;flex-direction:column;
+  }
+  .map-top-right{
+    position:absolute;top:10px;right:10px;z-index:3;display:flex;flex-direction:column;gap:6px;
+  }
+  .map-btn{
+    width:32px;height:32px;cursor:pointer;
+    background:rgba(10,40,100,0.7);border:1px solid rgba(90,200,255,0.5);
+    display:flex;align-items:center;justify-content:center;color:#7fd8ff;font-size:14px;
+    transition:all 0.2s;
+  }
+  .map-btn:hover{ color:#fff;border-color:#00eaff;box-shadow:0 0 10px rgba(0,234,255,0.6); }
+  #cqMap{ width:100%; height:100%; }
+
+  .map-legend{
+    position:absolute;right:12px;bottom:50%;transform:translateY(50%);z-index:3;
+    padding:8px 12px;background:rgba(5,25,70,0.7);border:1px solid rgba(60,140,230,0.4);
+  }
+  .legend-title{ font-size:12px;color:#9ec8ef;margin-bottom:6px;font-weight:700; }
+  .legend-item{ display:flex;align-items:center;gap:6px;font-size:12px;color:#cfdff0;padding:3px 0;cursor:pointer; }
+  .legend-dot{ width:10px;height:10px;border-radius:2px; }
+  .dot-water{ background:#1a73e8;box-shadow:0 0 6px #1a73e8; }
+  .dot-power{ background:#ff6b35;box-shadow:0 0 6px #ff6b35; }
+  .dot-gas{ background:#10c48a;box-shadow:0 0 6px #10c48a; }
+
+  /* ===== Price Ladders ===== */
+  .ladder-title{
+    text-align:center;padding:5px 0;font-size:14px;font-weight:700;color:#cfe6ff;letter-spacing:4px;
+    background:linear-gradient(90deg,transparent,rgba(0,140,240,0.25),transparent);
+    position:relative;flex-shrink:0;
+  }
+  .ladder-title::before,.ladder-title::after{ content:"❯❯";color:#00c8ff;font-size:10px;margin:0 8px;opacity:0.7;letter-spacing:1px; }
+  .ladder-title::after{ content:"❮❮"; }
+  .ladder-row{ display:grid;grid-template-columns:repeat(3,1fr);gap:7px;flex-shrink:0; }
+  .ladder-item{
+    padding:7px 8px;background:rgba(12,40,100,0.4);border:1px solid rgba(60,140,230,0.3);
+    display:flex;gap:6px;align-items:flex-start;overflow:hidden;
+  }
+  .ladder-stage{
+    padding:2px 6px;font-size:10px;color:#fff;flex-shrink:0;
+    background:linear-gradient(180deg,#0099ff,#0055cc);
+    border:1px solid rgba(0,200,255,0.5);
+  }
+  .ladder-info{ flex:1;min-width:0; }
+  .ladder-price{ font-size:10px;color:#9ec8ef;white-space:nowrap; }
+  .ladder-price b{ font-size:14px;color:#00eaff;margin-right:3px; }
+  .ladder-range{ font-size:10px;color:#9ec8ef;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+
+  .policy-row{ display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:1;min-height:0; }
+  .policy-card{
+    position:relative;overflow:hidden;
+    background:linear-gradient(180deg,rgba(12,42,100,0.55),rgba(6,24,70,0.55));
+    border:1px solid rgba(60,140,230,0.35);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    cursor:pointer;transition:all 0.25s;padding:8px 6px;
+  }
+  .policy-card:hover{ border-color:#00ccff; box-shadow:inset 0 0 20px rgba(0,180,255,0.25), 0 0 14px rgba(0,180,255,0.5); transform:translateY(-1px); }
+  .policy-card.active{
+    border-color:#ffcc00;box-shadow:inset 0 0 24px rgba(255,200,0,0.18),0 0 16px rgba(255,200,0,0.45);
+    background:linear-gradient(180deg,rgba(70,50,5,0.55),rgba(40,28,5,0.55));
+  }
+  .policy-card::after{
+    content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);
+    width:2px;height:30px;background:linear-gradient(180deg,transparent,rgba(0,200,255,0.6),transparent);
+  }
+  .policy-card:last-child::after{ display:none; }
+  .policy-icon{
+    width:52px;height:52px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,180,255,0.55),rgba(0,70,170,0.15));
+    border:2px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-size:24px;color:#00eaff;
+    box-shadow:inset 0 0 14px rgba(0,180,255,0.4);
+  }
+  .policy-card.active .policy-icon{
+    background:radial-gradient(circle,rgba(255,200,0,0.55),rgba(180,120,0,0.15));
+    border-color:rgba(255,204,0,0.7);color:#ffdd55;
+  }
+  .policy-text{ font-size:13px;font-weight:600;letter-spacing:2px;color:#e8f4ff;text-align:center;line-height:1.4; }
+  .policy-card.active .policy-text{ color:#fff4c9; }
+
+  /* ===== Billing Compare ===== */
+  .billing-grid{ display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex:1;min-height:0; }
+  .billing-card{
+    position:relative;padding:8px 5px;
+    background:linear-gradient(180deg,rgba(12,42,100,0.55),rgba(6,24,70,0.55));
+    border:1px solid rgba(60,140,230,0.35);
+    display:flex;flex-direction:column;align-items:center;
+    cursor:pointer;transition:all 0.25s;overflow:hidden;
+  }
+  .billing-card:hover{ border-color:#00ccff; box-shadow:0 0 14px rgba(0,180,255,0.5); }
+  .billing-icon{
+    width:34px;height:34px;margin-bottom:4px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,170,255,0.5),rgba(0,70,170,0.15));
+    border:1px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+  }
+  .billing-label{ font-size:10px;color:#9ec8ef;margin-bottom:3px;text-align:center;line-height:1.3; }
+  .billing-value{ font-size:17px;font-weight:700;color:#fff;text-shadow:0 0 10px rgba(90,200,255,0.5);white-space:nowrap; }
+  .billing-unit{ font-size:10px;color:#7ab4e6;margin-top:1px; }
+  .billing-sub{ font-size:10px;color:#00eaff;margin-top:4px;white-space:nowrap; }
+  .billing-sub .sub-label{ color:#9ec8ef;margin-right:3px; }
+  .billing-rate{ display:inline-flex;align-items:center;gap:2px;margin-top:3px;padding:1px 5px;font-size:10px;background:rgba(10,200,130,0.2);border:1px solid rgba(10,200,130,0.5);color:#10e090; }
+  .billing-rate.down{ background:rgba(10,200,130,0.2);border-color:rgba(10,200,130,0.5);color:#10e090; }
+  .billing-rate.up{ background:rgba(255,90,90,0.2);border-color:rgba(255,120,120,0.5);color:#ff8080; }
+
+  /* ===== Right: Risk ===== */
+  .risk-top-row{ display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex-shrink:0; }
+  .risk-card{
+    padding:8px 5px;text-align:center;overflow:hidden;
+    background:linear-gradient(180deg,rgba(12,42,100,0.55),rgba(6,24,70,0.55));
+    border:1px solid rgba(60,140,230,0.35);cursor:pointer;transition:all 0.25s;
+  }
+  .risk-card:hover{ border-color:#00ccff; box-shadow:0 0 14px rgba(0,180,255,0.5); }
+  .risk-icon{
+    width:32px;height:32px;margin:0 auto 4px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,170,255,0.5),rgba(0,70,170,0.15));
+    border:1px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .risk-value{ font-size:17px;font-weight:700;color:#fff;text-shadow:0 0 10px rgba(90,200,255,0.55);white-space:nowrap; }
+  .risk-unit{ font-size:10px;color:#7ab4e6; }
+  .risk-label{ font-size:11px;color:#9ec8ef;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+
+  .risk-warn-row{ display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;flex-shrink:0; }
+  .warn-card{
+    position:relative;padding:8px 10px;display:flex;align-items:center;gap:8px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(15,55,120,0.55),rgba(8,30,80,0.55));
+    border:1px solid rgba(60,140,230,0.35);cursor:pointer;transition:all 0.25s;
+  }
+  .warn-card:hover{ border-color:#00eaff;box-shadow:0 0 14px rgba(0,234,255,0.45); }
+  .warn-icon{
+    width:34px;height:34px;border-radius:6px;flex-shrink:0;
+    background:radial-gradient(circle,rgba(0,180,255,0.5),rgba(0,70,170,0.15));
+    border:1px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .warn-info{ flex:1;min-width:0;overflow:hidden; }
+  .warn-name{ font-size:11px;color:#9ec8ef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .warn-value{ font-size:16px;font-weight:700;color:#fff;margin-top:2px;white-space:nowrap; }
+  .warn-value .new{ font-size:10px;color:#ff9966;font-weight:400;margin-left:4px; }
+  .warn-arrow{ position:absolute;right:0;top:50%;transform:translateY(-50%); width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:7px solid #00eaff; }
+
+  .risk-actions{ display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px;flex-shrink:0; }
+  .action-btn{
+    padding:8px 4px;text-align:center;font-size:12px;cursor:pointer;
+    background:linear-gradient(180deg,rgba(15,55,120,0.55),rgba(8,30,80,0.55));
+    border:1px solid rgba(60,140,230,0.4);color:#cfe6ff;transition:all 0.25s;
+  }
+  .action-btn:hover{ color:#fff;border-color:#00ccff;background:linear-gradient(180deg,rgba(0,140,240,0.35),rgba(0,80,180,0.35)); box-shadow:0 0 10px rgba(0,180,255,0.5); }
+
+  .analysis-banner{
+    margin-top:6px;padding:10px;text-align:center;flex-shrink:0;cursor:pointer;
+    background:linear-gradient(90deg,rgba(0,100,220,0.25) 0%,rgba(0,170,255,0.45) 50%,rgba(0,100,220,0.25) 100%);
+    border:1px solid rgba(0,200,255,0.6);color:#e0f0ff;font-weight:700;font-size:15px;letter-spacing:4px;
+    transition:all 0.3s;position:relative;overflow:hidden;
+  }
+  .analysis-banner::before{
+    content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+    transition:left 0.8s;
+  }
+  .analysis-banner:hover::before{ left:130%; }
+  .analysis-banner:hover{ box-shadow:0 0 20px rgba(0,220,255,0.7); }
+  .analysis-banner::before,.analysis-banner::after{ content:"❯❯";color:#00eaff;font-size:11px;margin:0 10px;opacity:0.8;letter-spacing:1px; }
+  .analysis-banner::after{ content:"❮❮"; }
+
+  /* ===== Case List ===== */
+  .case-summary{ display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0; }
+  .case-sum-card{
+    padding:8px 10px;display:flex;align-items:center;gap:8px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(15,55,120,0.55),rgba(8,30,80,0.55));
+    border:1px solid rgba(60,140,230,0.35);cursor:pointer;transition:all 0.25s;
+  }
+  .case-sum-card:hover{ border-color:#00eaff; box-shadow:0 0 14px rgba(0,234,255,0.45); }
+  .case-sum-icon{
+    width:34px;height:34px;border-radius:50%;flex-shrink:0;
+    background:radial-gradient(circle,rgba(0,170,255,0.5),rgba(0,70,170,0.15));
+    border:1px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .case-sum-info{ flex:1;min-width:0;overflow:hidden; }
+  .case-sum-label{ font-size:11px;color:#9ec8ef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .case-sum-value{ font-size:17px;font-weight:700;color:#fff;margin-top:1px;white-space:nowrap; }
+  .case-sum-value .unit{ font-size:11px;color:#9ec8ef;font-weight:400;margin-left:2px; }
+
+  .case-table{
+    flex:1;min-height:0;display:flex;flex-direction:column;border:1px solid rgba(60,140,230,0.3);
+    margin-top:6px;overflow:hidden;
+  }
+  .case-th,.case-tr{ display:grid;grid-template-columns:1.2fr 1fr 0.7fr; }
+  .case-th{
+    padding:6px 8px;background:linear-gradient(90deg,rgba(0,120,220,0.35),rgba(0,80,180,0.2));
+    color:#cfe6ff;font-size:11px;font-weight:700;flex-shrink:0;border-bottom:1px solid rgba(60,140,230,0.35);
+  }
+  .case-tbody{ flex:1;overflow:hidden;display:flex;flex-direction:column; }
+  .case-tr{
+    padding:7px 8px;font-size:11px;color:#b9d5f0;
+    border-bottom:1px dashed rgba(60,140,230,0.22);cursor:pointer;transition:all 0.2s;
+    align-items:center;
+  }
+  .case-tr:hover{ background:rgba(0,150,255,0.15);color:#fff; }
+  .case-tr:nth-child(even){ background:rgba(10,40,100,0.2); }
+  .case-tr:nth-child(even):hover{ background:rgba(0,150,255,0.2); }
+  .case-name{ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:6px; }
+  .case-company{ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:6px;color:#9ec8ef; }
+  .case-type{
+    padding:2px 6px;font-size:11px;
+    background:rgba(0,160,255,0.18);border:1px solid rgba(0,200,255,0.5);color:#6cd8ff;
+    text-align:center;
+  }
+  .case-type.price{ background:rgba(255,170,50,0.18);border-color:rgba(255,170,50,0.5);color:#ffc46c; }
+
+  /* ===== Review Bottom ===== */
+  .review-grid{ display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0; }
+  .review-card{
+    position:relative;padding:8px 10px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(15,55,120,0.55),rgba(8,30,80,0.55));
+    border:1px solid rgba(60,140,230,0.35);
+    display:flex;align-items:center;gap:8px;cursor:pointer;transition:all 0.25s;
+  }
+  .review-card:hover{ border-color:#00eaff; box-shadow:0 0 14px rgba(0,234,255,0.5); }
+  .review-icon{
+    width:38px;height:38px;border-radius:8px;flex-shrink:0;
+    background:radial-gradient(circle,rgba(0,170,255,0.55),rgba(0,70,170,0.15));
+    border:1px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-size:17px;
+    box-shadow:inset 0 0 14px rgba(0,180,255,0.4);
+  }
+  .review-info{ flex:1;min-width:0;overflow:hidden; }
+  .review-name{ font-size:12px;color:#e8f4ff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .review-value{ font-size:18px;font-weight:700;color:#00eaff;margin-top:3px;text-shadow:0 0 10px rgba(0,234,255,0.55);white-space:nowrap; }
+  .review-value .unit{ font-size:11px;color:#9ec8ef;font-weight:400;margin-left:2px; }
+  .review-tag{ position:absolute;top:5px;right:7px;font-size:10px;color:#ff6666; }
+
+  /* ===== Bottom Center (Data Lib + Event Center) ===== */
+  .bottom-center{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;flex-shrink:0;padding:6px 4px 4px;
+  }
+  .resource-block,.event-block{
+    position:relative;
+    background:linear-gradient(180deg,rgba(8,30,80,0.55),rgba(4,18,55,0.55));
+    border:1px solid rgba(60,140,230,0.35);
+    padding:8px 12px;
+  }
+  .resource-block::before,.resource-block::after,
+  .event-block::before,.event-block::after{
+    content:"";position:absolute;width:10px;height:10px;border:2px solid #00d4ff;pointer-events:none;
+  }
+  .resource-block::before{ top:-1px;left:-1px;border-right:none;border-bottom:none; }
+  .resource-block::after{ bottom:-1px;right:-1px;border-left:none;border-top:none; }
+  .event-block::before{ top:-1px;left:-1px;border-right:none;border-bottom:none; }
+  .event-block::after{ bottom:-1px;right:-1px;border-left:none;border-top:none; }
+  .rb-header{
+    display:flex;align-items:center;gap:8px;margin-bottom:8px;position:relative;
+  }
+  .rb-diamond{
+    width:10px;height:10px;background:linear-gradient(135deg,#00eaff,#0088ff);transform:rotate(45deg);
+    box-shadow:0 0 8px rgba(0,234,255,0.7);
+  }
+  .rb-title{ font-size:15px;font-weight:700;color:#e8f4ff;letter-spacing:3px; }
+  .rb-title-deco{ flex:1;height:2px;margin:0 10px;background:linear-gradient(90deg,rgba(0,200,255,0.6),transparent);position:relative; }
+  .rb-title-deco::after{
+    content:"";position:absolute;right:0;top:50%;transform:translateY(-50%) rotate(45deg);
+    width:8px;height:8px;border:1px solid #00d4ff;background:rgba(0,150,255,0.3);
+  }
+  .rb-row-1{ display:flex;align-items:center;gap:8px;margin-bottom:6px; }
+  .rb-big-num{
+    padding:6px 10px;flex-shrink:0;
+    background:linear-gradient(135deg,rgba(30,80,170,0.6),rgba(15,45,110,0.6));
+    border:1px solid rgba(60,140,230,0.5);
+  }
+  .rb-big-label{ font-size:10px;color:#9ec8ef;white-space:nowrap; }
+  .rb-big-value{ font-size:16px;font-weight:700;color:#fff;margin-top:2px;white-space:nowrap; }
+  .rb-big-value .unit{ font-size:11px;color:#7ab4e6;font-weight:400;margin-left:2px; }
+  .rb-items{ flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;min-width:0; }
+  .rb-item{
+    padding:4px 7px;background:rgba(12,42,100,0.45);border:1px solid rgba(60,140,230,0.3);overflow:hidden;
+  }
+  .rb-item-label{ font-size:10px;color:#9ec8ef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .rb-item-value{ font-size:12px;font-weight:700;color:#00eaff;margin-top:1px;white-space:nowrap; }
+  .rb-item-value .unit{ font-size:9px;color:#7ab4e6;font-weight:400;margin-left:2px; }
+  .rb-row-2{ display:grid;grid-template-columns:1fr 1fr;gap:6px; }
+  .rb-link-card{
+    display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;overflow:hidden;
+    background:linear-gradient(135deg,rgba(15,55,120,0.55),rgba(8,30,80,0.55));
+    border:1px solid rgba(60,140,230,0.4);transition:all 0.25s;
+  }
+  .rb-link-card:hover{ border-color:#00ccff;box-shadow:0 0 14px rgba(0,180,255,0.5); }
+  .rb-link-icon{
+    width:28px;height:28px;border-radius:50%;flex-shrink:0;
+    background:radial-gradient(circle,rgba(0,180,255,0.5),rgba(0,70,170,0.15));
+    border:1px solid rgba(0,220,255,0.6);
+    display:flex;align-items:center;justify-content:center;font-size:13px;
+  }
+  .rb-link-name{ font-size:11px;color:#cfe6ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .rb-link-value{ font-size:16px;font-weight:700;color:#00eaff;white-space:nowrap; }
+  .rb-link-value .unit{ font-size:10px;color:#9ec8ef;font-weight:400;margin-left:2px; }
+  .eb-extra-btn{
+    position:absolute;right:12px;top:10px;padding:2px 8px;font-size:11px;cursor:pointer;
+    background:rgba(0,120,220,0.25);border:1px solid rgba(0,200,255,0.4);color:#9ec8ef;
+  }
+  .eb-extra-btn:hover{ color:#fff;border-color:#00ccff; }
+
+  /* ===== icon helpers ===== */
+  .ic{ width:1em;height:1em;display:inline-block;vertical-align:-2px; }
+
+  /* ===== Scrollbar ===== */
+  ::-webkit-scrollbar{ width:6px;height:6px; }
+  ::-webkit-scrollbar-track{ background:rgba(10,40,100,0.3); }
+  ::-webkit-scrollbar-thumb{ background:rgba(0,150,255,0.5);border-radius:3px; }
+
+  /* ===== Hover ripple / click ===== */
+  .clickable:active{ transform:scale(0.98); }
+  .tooltip-map{
+    position:absolute;padding:6px 10px;font-size:12px;pointer-events:none;z-index:100;
+    background:rgba(5,25,70,0.92);border:1px solid #00c8ff;color:#e8f4ff;
+    box-shadow:0 0 14px rgba(0,200,255,0.6);display:none;
+  }
+</style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-deco-left"></div>
+    <div class="header-deco-right"></div>
+    <div class="header-title">法治·水电气收费智管</div>
+    <div class="region-select" onclick="alert('切换行政区划')">重庆市</div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- LEFT COLUMN -->
+    <div class="col">
+      <!-- 计量合格 -->
+      <div class="panel" style="flex:1.1;">
+        <span class="panel-corner-tr"></span><span class="panel-corner-bl"></span>
+        <div class="panel-title">
+          <span class="panel-title-icon"></span>
+          <span class="panel-title-text">计量合格</span>
+          <div class="tabs" style="margin-left:auto;">
+            <div class="tab active" onclick="switchTab(this,'meter-water')">供水</div>
+            <div class="tab" onclick="switchTab(this,'meter-power')">供电</div>
+            <div class="tab" onclick="switchTab(this,'meter-gas')">供气</div>
+          </div>
+          <div class="panel-title-deco"></div>
+        </div>
+        <div class="panel-body">
+          <div class="stat-grid">
+            <div class="stat-card clickable" onclick="showDetail('燃气表总数')">
+              <div class="stat-icon">🔥</div>
+              <div class="stat-info">
+                <div class="stat-label">燃气表总数</div>
+                <div class="stat-value">4530818<span class="unit">只</span></div>
+              </div>
+            </div>
+            <div class="stat-card clickable" onclick="showDetail('首次检定合格率')">
+              <div class="stat-icon">🛡️</div>
+              <div class="stat-info">
+                <div class="stat-label">首次检定合格率</div>
+                <div class="stat-value">99.45<span class="unit">%</span></div>
+              </div>
+            </div>
+            <div class="stat-card clickable" onclick="showDetail('燃气表全链条跟踪')">
+              <div class="stat-icon">🔗</div>
+              <div class="stat-info">
+                <div class="stat-label">燃气表全链条跟踪</div>
+                <div class="stat-enter">点击进入</div>
+              </div>
+            </div>
+            <div class="stat-card clickable" onclick="showDetail('燃气表检定质量分析报告')">
+              <div class="stat-icon">📋</div>
+              <div class="stat-info">
+                <div class="stat-label">燃气表检定质量分析报告</div>
+                <div class="stat-enter">点击进入</div>
+              </div>
+            </div>
+            <div class="stat-card clickable" onclick="showDetail('表具临期')">
+              <div class="stat-icon">⏰</div>
+              <div class="stat-info">
+                <div class="stat-label">表具临期</div>
+                <div class="stat-value">186817<span class="unit">个</span></div>
+              </div>
+            </div>
+            <div class="stat-card clickable" onclick="showDetail('授权检定机构')">
+              <div class="stat-icon">🏛️</div>
+              <div class="stat-info">
+                <div class="stat-label">授权检定机构</div>
+                <div class="stat-value">2<span class="unit">家</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 计价合法 -->
+      <div class="panel" style="flex:1;">
+        <span class="panel-corner-tr"></span><span class="panel-corner-bl"></span>
+        <div class="panel-title">
+          <span class="panel-title-icon"></span>
+          <span class="panel-title-text">计价合法</span>
+          <div class="tabs" style="margin-left:auto;">
+            <div class="tab active" onclick="switchTab(this,'price-water')">供水</div>
+            <div class="tab" onclick="switchTab(this,'price-power')">供电</div>
+            <div class="tab" onclick="switchTab(this,'price-gas')">供气</div>
+          </div>
+          <div class="panel-title-deco"></div>
+        </div>
+        <div class="panel-body" style="gap:10px;">
+          <div class="ladder-title">用户用量阶梯情况</div>
+          <div class="ladder-row">
+            <div class="ladder-item clickable" onclick="showDetail('阶梯一价')">
+              <div class="ladder-stage">一阶</div>
+              <div class="ladder-info">
+                <div class="ladder-price">价格 <b>2.2</b></div>
+                <div class="ladder-range">范围(m³) 0–500</div>
+              </div>
+            </div>
+            <div class="ladder-item clickable" onclick="showDetail('阶梯二价')">
+              <div class="ladder-stage">二阶</div>
+              <div class="ladder-info">
+                <div class="ladder-price">价格 <b>2.37</b></div>
+                <div class="ladder-range">范围(m³) 500–660</div>
+              </div>
+            </div>
+            <div class="ladder-item clickable" onclick="showDetail('阶梯三价')">
+              <div class="ladder-stage">三阶</div>
+              <div class="ladder-info">
+                <div class="ladder-price">价格 <b>2.72</b></div>
+                <div class="ladder-range">范围(m³) 660+</div>
+              </div>
+            </div>
+          </div>
+          <div class="policy-row" style="margin-top:2px;">
+            <div class="policy-card clickable" onclick="activePolicy(this,'政策一览')">
+              <div class="policy-icon">🗺️</div>
+              <div class="policy-text">价格<br/>政策一览</div>
+            </div>
+            <div class="policy-card active clickable" onclick="activePolicy(this,'政策匹配')">
+              <div class="policy-icon">👤</div>
+              <div class="policy-text">价格<br/>政策匹配</div>
+            </div>
+            <div class="policy-card clickable" onclick="activePolicy(this,'政策变更')">
+              <div class="policy-icon">⚙️</div>
+              <div class="policy-text">价格<br/>政策变更</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 计费合理 -->
+      <div class="panel" style="flex:1;">
+        <span class="panel-corner-tr"></span><span class="panel-corner-bl"></span>
+        <div class="panel-title">
+          <span class="panel-title-icon"></span>
+          <span class="panel-title-text">计费合理</span>
+          <div class="tabs" style="margin-left:auto;">
+            <div class="tab active" onclick="switchTab(this,'bill-water')">供水</div>
+            <div class="tab" onclick="switchTab(this,'bill-power')">供电</div>
+            <div class="tab" onclick="switchTab(this,'bill-gas')">供气</div>
+          </div>
+          <div class="panel-title-deco"></div>
+        </div>
+        <div class="panel-body" style="gap:10px;">
+          <div class="ladder-title">用户缴费情况同环比分析</div>
+          <div class="billing-grid">
+            <div class="billing-card clickable" onclick="showDetail('多人一诉')">
+              <div class="billing-icon">👥</div>
+              <div class="billing-label">多人一诉</div>
+              <div class="billing-value">297</div>
+              <div class="billing-unit">件</div>
+              <div class="billing-sub"><span class="sub-label">一人多诉</span></div>
+              <div style="font-size:14px;font-weight:700;color:#fff;">9389<span style="font-size:11px;color:#9ec8ef;">人</span></div>
+            </div>
+            <div class="billing-card clickable" onclick="showDetail('欠费户数')">
+              <div class="billing-icon">💧</div>
+              <div class="billing-label">连续三月及以上欠费户数</div>
+              <div class="billing-value">338117</div>
+              <div class="billing-unit">户</div>
+              <div class="billing-sub"><span class="sub-label">环比</span></div>
+              <div class="billing-rate down">▼ -3.4%</div>
+            </div>
+            <div class="billing-card clickable" onclick="showDetail('零抄户数')">
+              <div class="billing-icon">📉</div>
+              <div class="billing-label">连续三月及以上零抄户数</div>
+              <div class="billing-value">915092</div>
+              <div class="billing-unit">户</div>
+              <div class="billing-sub"><span class="sub-label">环比</span></div>
+              <div class="billing-rate down">▼ -1.54%</div>
+            </div>
+            <div class="billing-card clickable" onclick="showDetail('优惠用户')">
+              <div class="billing-icon">💎</div>
+              <div class="billing-label">优惠用户数</div>
+              <div class="billing-value">733</div>
+              <div class="billing-unit">户</div>
+              <div class="billing-sub"><span class="sub-label">应享未享</span></div>
+              <div style="font-size:14px;font-weight:700;color:#fff;">381<span style="font-size:11px;color:#9ec8ef;">户</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER COLUMN -->
+    <div class="col-center">
+      <!-- Top Indicators -->
+      <div class="top-indicators" style="flex-shrink:0;">
+        <div class="indicator clickable" onclick="showDetail('供水企业')">
+          <div class="indicator-icon">💧</div>
+          <div class="indicator-info">
+            <div class="indicator-name">全市/供水企业(中心城区)</div>
+            <div class="indicator-values">
+              <span class="indicator-main">110<span class="small">家/</span>8<span class="small">家</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="indicator clickable" onclick="showDetail('供电企业')">
+          <div class="indicator-icon">⚡</div>
+          <div class="indicator-info">
+            <div class="indicator-name">全市/供电企业(中心城区)</div>
+            <div class="indicator-values">
+              <span class="indicator-main">5<span class="small">家/</span>1<span class="small">家</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="indicator clickable" onclick="showDetail('供气企业')">
+          <div class="indicator-icon">🔥</div>
+          <div class="indicator-info">
+            <div class="indicator-name">全市/供气企业(中心城区)</div>
+            <div class="indicator-values">
+              <span class="indicator-main">125<span class="small">家/</span>18<span class="small">家</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rate 4 items -->
+      <div class="rates" style="flex-shrink:0;">
+        <div class="rate-item clickable" onclick="showDetail('三表首检合格率')">
+          <span class="rate-flag"></span>
+          <div class="rate-icon">✔</div>
+          <div class="rate-info">
+            <div class="rate-name">三表首检合格率</div>
+            <div class="rate-value">99.8%</div>
+            <div class="rate-target">目标 ≥99%</div>
+          </div>
+        </div>
+        <div class="rate-item clickable" onclick="showDetail('价格政策执行到位率')">
+          <div class="rate-icon">¥</div>
+          <div class="rate-info">
+            <div class="rate-name">价格政策执行到位率</div>
+            <div class="rate-value">100.0%</div>
+            <div class="rate-target">目标 100%</div>
+          </div>
+        </div>
+        <div class="rate-item clickable" onclick="showDetail('居民投诉处置完成率')">
+          <div class="rate-icon">📢</div>
+          <div class="rate-info">
+            <div class="rate-name">居民投诉处置完成率</div>
+            <div class="rate-value">99.3%</div>
+            <div class="rate-target">目标 ≥98%</div>
+          </div>
+        </div>
+        <div class="rate-item clickable" onclick="showDetail('风险处置完成率')">
+          <div class="rate-icon">⚠</div>
+          <div class="rate-info">
+            <div class="rate-name">风险处置完成率</div>
+            <div class="rate-value">100.0%</div>
+            <div class="rate-target">目标 ≥90%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert bar -->
+      <div class="alert-bar clickable" onclick="showDetail('气价异常告警')" style="flex-shrink:0;">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-text">202605月，"<b>重庆燃气集团股份有限公司</b>"有1户存在...</div>
+        <div class="alert-tag">气价异常</div>
+        <div class="alert-time">2026-07-09 00:00:00</div>
+        <div class="alert-btn">查看</div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-wrap">
+        <div class="map-top-right">
+          <div class="map-btn" title="全屏" onclick="alert('全屏地图')">⛶</div>
+          <div class="map-btn" title="刷新" onclick="refreshMap()">↻</div>
+        </div>
+        <div class="map-legend">
+          <div class="legend-title">资源类型</div>
+          <div class="legend-item"><span class="legend-dot dot-water"></span>供水</div>
+          <div class="legend-item"><span class="legend-dot dot-power"></span>供电</div>
+          <div class="legend-item"><span class="legend-dot dot-gas"></span>供气</div>
+        </div>
+        <div id="cqMap"></div>
+        <div class="tooltip-map" id="mapTip"></div>
+      </div>
+
+      <!-- Bottom center 2 blocks -->
+      <div class="bottom-center">
+        <div class="resource-block">
+          <div class="rb-header">
+            <span class="rb-diamond"></span>
+            <div class="rb-title">水电气基础资源库</div>
+            <div class="rb-title-deco"></div>
+            <span class="rb-diamond"></span>
+          </div>
+          <div class="rb-row-1">
+            <div class="rb-big-num">
+              <div class="rb-big-label">数据归集情况</div>
+              <div class="rb-big-value">11.39<span class="unit">亿条</span></div>
+            </div>
+            <div class="rb-items">
+              <div class="rb-item clickable" onclick="showDetail('水务数据')">
+                <div class="rb-item-label">水务数据</div>
+                <div class="rb-item-value">1.71<span class="unit">亿条</span></div>
+              </div>
+              <div class="rb-item clickable" onclick="showDetail('燃气数据')">
+                <div class="rb-item-label">燃气数据</div>
+                <div class="rb-item-value">4.17<span class="unit">亿条</span></div>
+              </div>
+              <div class="rb-item clickable" onclick="showDetail('电力数据')">
+                <div class="rb-item-label">电力数据</div>
+                <div class="rb-item-value">5.19<span class="unit">亿条</span></div>
+              </div>
+              <div class="rb-item clickable" onclick="showDetail('表具数据')">
+                <div class="rb-item-label">表具数据</div>
+                <div class="rb-item-value">0.32<span class="unit">亿条</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="rb-row-2">
+            <div class="rb-link-card clickable" onclick="showDetail('三表联动数据')">
+              <div class="rb-link-icon">🔗</div>
+              <div>
+                <div class="rb-link-name">三表联动数据</div>
+                <div class="rb-link-value">285<span class="unit">万条</span></div>
+              </div>
+            </div>
+            <div class="rb-link-card clickable" onclick="showDetail('表具生产企业')">
+              <div class="rb-link-icon">🏭</div>
+              <div>
+                <div class="rb-link-name">表具生产企业</div>
+                <div class="rb-link-value">121<span class="unit">家</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-block">
+          <div class="eb-extra-btn" onclick="showDetail('数据架构图')">数据架构图</div>
+          <div class="rb-header">
+            <span class="rb-diamond"></span>
+            <div class="rb-title">事件中心</div>
+            <div class="rb-title-deco"></div>
+            <span class="rb-diamond"></span>
+          </div>
+          <div class="rb-row-1">
+            <div class="rb-big-num">
+              <div class="rb-big-label">数据治理情况</div>
+              <div class="rb-big-value">10.68<span class="unit">亿条</span></div>
+            </div>
+            <div class="rb-items">
+              <div class="rb-item clickable" onclick="showDetail('水务数据治理')">
+                <div class="rb-item-label">水务数据</div>
+                <div class="rb-item-value">1.43<span class="unit">亿条</span></div>
+              </div>
+              <div class="rb-item clickable" onclick="showDetail('燃气数据治理')">
+                <div class="rb-item-label">燃气数据</div>
+                <div class="rb-item-value">3.99<span class="unit">亿条</span></div>
+              </div>
+              <div class="rb-item clickable" onclick="showDetail('电力数据治理')">
+                <div class="rb-item-label">电力数据</div>
+                <div class="rb-item-value">5.03<span class="unit">亿条</span></div>
+              </div>
+              <div class="rb-item clickable" onclick="showDetail('表具数据治理')">
+                <div class="rb-item-label">表具数据</div>
+                <div class="rb-item-value">0.23<span class="unit">亿条</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="rb-row-2">
+            <div class="rb-link-card clickable" onclick="showDetail('事件1')">
+              <div class="rb-link-icon">📊</div>
+              <div>
+                <div class="rb-link-name">治理规则库</div>
+                <div class="rb-link-value">38<span class="unit">类</span></div>
+              </div>
+            </div>
+            <div class="rb-link-card clickable" onclick="showDetail('事件2')">
+              <div class="rb-link-icon">🔔</div>
+              <div>
+                <div class="rb-link-name">异常事件</div>
+                <div class="rb-link-value">9,521<span class="unit">件</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col">
+      <!-- 风险智控 -->
+      <div class="panel" style="flex:1.2;">
+        <span class="panel-corner-tr"></span><span class="panel-corner-bl"></span>
+        <div class="panel-title">
+          <span class="panel-title-icon"></span>
+          <span class="panel-title-text">风险智控</span>
+          <div class="panel-title-deco"></div>
+        </div>
+        <div class="panel-body" style="gap:8px;">
+          <div style="padding:4px 6px;font-size:12px;color:#9ec8ef;font-weight:700;border-left:3px solid #00c8ff;background:linear-gradient(90deg,rgba(0,150,255,0.2),transparent);margin-bottom:2px;">风险感知</div>
+          <div class="risk-top-row">
+            <div class="risk-card clickable" onclick="showDetail('投诉举报')">
+              <div class="risk-icon">📥</div>
+              <div class="risk-value">240044</div>
+              <div class="risk-unit">个</div>
+              <div class="risk-label">投诉举报</div>
+            </div>
+            <div class="risk-card clickable" onclick="showDetail('舆情监测')">
+              <div class="risk-icon">🌐</div>
+              <div class="risk-value">870</div>
+              <div class="risk-unit">个</div>
+              <div class="risk-label">舆情监测</div>
+            </div>
+            <div class="risk-card clickable" onclick="showDetail('异常用户分析')">
+              <div class="risk-icon">👁️</div>
+              <div class="risk-value">511</div>
+              <div class="risk-unit">个</div>
+              <div class="risk-label">异常用户分析</div>
+            </div>
+          </div>
+
+          <div style="padding:4px 6px;font-size:12px;color:#9ec8ef;font-weight:700;border-left:3px solid #ffaa33;background:linear-gradient(90deg,rgba(255,150,50,0.18),transparent);margin-top:2px;">风险预警</div>
+          <div class="risk-warn-row">
+            <div class="warn-card clickable" onclick="showDetail('风险预警')">
+              <div class="warn-icon">🚨</div>
+              <div class="warn-info">
+                <div class="warn-name">风险预警</div>
+                <div class="warn-value">1 <span class="new">本月新增1个</span></div>
+              </div>
+              <span class="warn-arrow"></span>
+            </div>
+            <div class="warn-card clickable" onclick="showDetail('风险模型数量')">
+              <div class="warn-icon">🧩</div>
+              <div class="warn-info">
+                <div class="warn-name">风险模型数量</div>
+                <div class="warn-value">7 <span class="new">个</span></div>
+              </div>
+              <span class="warn-arrow"></span>
+            </div>
+          </div>
+
+          <div class="risk-actions">
+            <div class="action-btn clickable" onclick="showDetail('公安安全排查')">公安安全排查</div>
+            <div class="action-btn clickable" onclick="showDetail('民政惠民保障')">民政惠民保障</div>
+            <div class="action-btn clickable" onclick="showDetail('燃气安全管控')">燃气安全管控</div>
+          </div>
+
+          <div class="analysis-banner clickable" onclick="showDetail('启动三表联动分析')">启动三表联动分析</div>
+        </div>
+      </div>
+
+      <!-- 执法监督 -->
+      <div class="panel" style="flex:1.1;">
+        <span class="panel-corner-tr"></span><span class="panel-corner-bl"></span>
+        <div class="panel-title">
+          <span class="panel-title-icon"></span>
+          <span class="panel-title-text">执法监督</span>
+          <div class="panel-title-deco"></div>
+        </div>
+        <div class="panel-body">
+          <div class="case-summary">
+            <div class="case-sum-card clickable" onclick="showDetail('案件数')">
+              <div class="case-sum-icon">📂</div>
+              <div class="case-sum-info">
+                <div class="case-sum-label">案件数</div>
+                <div class="case-sum-value">138<span class="unit">件</span></div>
+              </div>
+            </div>
+            <div class="case-sum-card clickable" onclick="showDetail('案件类型数')">
+              <div class="case-sum-icon">🗂️</div>
+              <div class="case-sum-info">
+                <div class="case-sum-label">案件类型数</div>
+                <div class="case-sum-value">4<span class="unit">类</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-table">
+            <div class="case-th">
+              <div>案件名称</div>
+              <div>涉案企业</div>
+              <div style="text-align:center;">案件类型</div>
+            </div>
+            <div class="case-tbody" id="caseList">
+              <div class="case-tr clickable" onclick="showCaseDetail('强检计量器具未按规定申请检定案','彭水县润泽自来水有限公司','计量类')">
+                <div class="case-name" title="强检计量器具未按规定申请检定案">强检计量器具未按规...</div>
+                <div class="case-company" title="彭水县润泽自来水有限公司">彭水县润泽自来水有...</div>
+                <div class="case-type">计量类</div>
+              </div>
+              <div class="case-tr clickable" onclick="showCaseDetail('经营者不执行政府定价政府指导价案','重庆凯源石油天然气有限公司','价格类')">
+                <div class="case-name" title="经营者不执行政府定价政府指导价案">经营者不执行政府指...</div>
+                <div class="case-company" title="重庆凯源石油天然气有限公司">重庆凯源石油天然气...</div>
+                <div class="case-type price">价格类</div>
+              </div>
+              <div class="case-tr clickable" onclick="showCaseDetail('强检计量器具未按规定申请检定案','重庆长寿开投水务有限公司','计量类')">
+                <div class="case-name" title="强检计量器具未按规定申请检定案">强检计量器具未按规...</div>
+                <div class="case-company" title="重庆长寿开投水务有限公司">重庆长寿开投水务有...</div>
+                <div class="case-type">计量类</div>
+              </div>
+              <div class="case-tr clickable" onclick="showCaseDetail('不执行政府定价、政府指导价案','重庆中梁山渝能燃气有限公司','计量类')">
+                <div class="case-name" title="不执行政府定价、政府指导价案">不执行政府定价、政...</div>
+                <div class="case-company" title="重庆中梁山渝能燃气有限公司">重庆中梁山渝能燃气...</div>
+                <div class="case-type">计量类</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 复盘改进 -->
+      <div class="panel" style="flex:0.7;">
+        <span class="panel-corner-tr"></span><span class="panel-corner-bl"></span>
+        <div class="panel-title">
+          <span class="panel-title-icon"></span>
+          <span class="panel-title-text">复盘改进</span>
+          <div class="panel-title-deco"></div>
+        </div>
+        <div class="panel-body">
+          <div class="review-grid">
+            <div class="review-card clickable" onclick="showDetail('复盘评估报告')">
+              <div class="review-icon">📝</div>
+              <div class="review-info">
+                <div class="review-name">复盘评估报告</div>
+                <div class="review-value">1<span class="unit">个</span></div>
+              </div>
+            </div>
+            <div class="review-card clickable" onclick="showDetail('制度性成果')">
+              <div class="review-tag">激活</div>
+              <div class="review-icon">📘</div>
+              <div class="review-info">
+                <div class="review-name">制度性成果</div>
+                <div class="review-value">5<span class="unit">项</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* ============ 交互逻辑 ============ */
+function showDetail(name){ alert('打开详情：' + name); }
+function showCaseDetail(a,b,c){ alert('【'+a+'】\n涉案企业：'+b+'\n类型：'+c); }
+function switchTab(el,key){
+  const tabs = el.parentElement.querySelectorAll('.tab');
+  tabs.forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+function activePolicy(el,name){
+  document.querySelectorAll('.policy-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ============ 重庆 3D GIS 地图（ECharts map3D + 真实 GeoJSON） ============ */
+let cqChart=null, cqGeoJson=null, __glRetry=0;
+
+function initCqMap(){
+  const dom=document.getElementById('cqMap');
+  if(!dom||!window.echarts) return;
+  // 等待 echarts-gl 加载完成
+  if(!window.__glReady){
+    __glRetry++;
+    if(__glRetry>24){
+      dom.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ff8080;font-size:13px;text-align:center;padding:20px;">3D地图引擎加载失败<br/>请检查网络连接</div>';
+      return;
+    }
+    dom.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7fd8ff;font-size:13px;letter-spacing:2px;">3D 地图引擎加载中…</div>';
+    setTimeout(initCqMap,500);
+    return;
+  }
+  // 已缓存则直接渲染
+  if(cqGeoJson){
+    dom.innerHTML='';
+    cqChart=echarts.init(dom);
+    renderCqMap3D(cqGeoJson);
+    return;
+  }
+  dom.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7fd8ff;font-size:13px;letter-spacing:2px;">正在加载重庆地图数据…</div>';
+  loadCqGeoJson().then(geoJson=>{
+    cqGeoJson=geoJson;
+    echarts.registerMap('重庆',geoJson);
+    dom.innerHTML='';
+    cqChart=echarts.init(dom);
+    renderCqMap3D(geoJson);
+  }).catch(err=>{
+    console.error('重庆地图数据加载失败',err);
+    dom.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ff8080;font-size:13px;text-align:center;padding:20px;line-height:1.8;">重庆地图数据加载失败<br/>请检查网络后点击右上角刷新</div>';
+  });
+}
+
+/* 加载重庆 GeoJSON（本地优先，远程备用） */
+function loadCqGeoJson(){
+  const urls=[
+    'market_regulation_scenarios_analysis/_shared/js/chongqing.geo.json',
+    'https://geo.datav.aliyun.com/areas_v3/bound/500000_full.json',
+    'https://geojson.cn/api/china/500000.json'
+  ];
+  let p=Promise.reject();
+  urls.forEach(url=>{
+    p=p.catch(()=>fetch(url).then(r=>{
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }));
+  });
+  return p;
+}
+
+/* 渲染 3D 地图 */
+function renderCqMap3D(geoJson){
+  const centerDistricts=['渝中区','江北区','南岸区','九龙坡区','沙坪坝区','大渡口区','北碚区','渝北区','巴南区'];
+  const mapData=geoJson.features.map(f=>{
+    const name=f.properties.name;
+    const isCenter=centerDistricts.indexOf(name)>=0;
+    return {
+      name:name,
+      value:isCenter?100:Math.floor(Math.random()*55+25),
+      itemStyle:{
+        color:isCenter?'#1fb6ff':'#1565c0',
+        opacity:0.92
+      }
+    };
+  });
+
+  const option={
+    backgroundColor:'transparent',
+    tooltip:{
+      trigger:'item',
+      backgroundColor:'rgba(3,18,45,0.95)',
+      borderColor:'#00c8ff',
+      borderWidth:1,
+      padding:[8,12],
+      textStyle:{color:'#e8f4ff',fontSize:12},
+      formatter:function(p){
+        const seed=(p.name||'').length;
+        const ent=((seed*7)%70)+8;
+        const meter=((seed*3)%25)+5;
+        return '<b style="color:#00eaff;font-size:13px;">'+p.name+'</b><br/>'+
+               '<span style="opacity:0.85;">水电气企业：'+ent+' 家</span><br/>'+
+               '<span style="opacity:0.85;">在用表具：'+meter+' 万只</span>';
+      }
+    },
+    series:[{
+      type:'map3D',
+      map:'重庆',
+      data:mapData,
+      boxWidth:240,
+      boxDepth:200,
+      regionHeight:8,
+      shading:'lambert',
+      environment:'#020a1e',
+      light:{
+        main:{intensity:1.8,shadow:true,alpha:55,beta:35,quality:'high'},
+        ambient:{intensity:0.6}
+      },
+      viewControl:{
+        distance:165,
+        alpha:75,
+        beta:5,
+        center:[0,0,0],
+        autoRotate:true,
+        autoRotateDirection:'cw',
+        autoRotateSpeed:4,
+        autoRotateAfterStill:8,
+        panMouseButton:'left',
+        rotateMouseButton:'right',
+        animation:true,
+        animationDurationUpdate:800,
+        animationEasingUpdate:'cubicInOut'
+      },
+      itemStyle:{
+        color:'#1565c0',
+        borderWidth:1.2,
+        borderColor:'#5aa0e8',
+        opacity:0.92
+      },
+      emphasis:{
+        itemStyle:{
+          color:'#4ad3ff',
+          borderColor:'#ffffff',
+          borderWidth:2,
+          opacity:1
+        },
+        label:{
+          show:true,
+          color:'#ffffff',
+          fontSize:13,
+          fontWeight:'bold',
+          backgroundColor:'rgba(0,40,100,0.75)',
+          padding:[3,8],
+          borderColor:'#00eaff',
+          borderWidth:1
+        }
+      },
+      label:{
+        show:true,
+        color:'#b9d9f7',
+        fontSize:9,
+        formatter:'{b}',
+        textStyle:{backgroundColor:'transparent'}
+      },
+      groundPlane:{show:false}
+    }]
+  };
+  cqChart.setOption(option);
+  window.addEventListener('resize',function(){
+    if(cqChart) cqChart.resize();
+  });
+}
+
+function refreshMap(){
+  const dom=document.getElementById('cqMap');
+  if(!dom) return;
+  if(cqChart){cqChart.dispose();cqChart=null;}
+  cqGeoJson=null;
+  dom.style.opacity=0.3;
+  setTimeout(()=>{
+    initCqMap();
+    dom.style.opacity=1;
+    dom.style.transition='opacity 0.4s';
+  },200);
+}
+
+window.addEventListener('load', ()=>{
+  initCqMap();
+  // 让案件列表自动滚动循环
+  autoScrollCase();
+});
+
+/* 案件列表自动滚动 */
+function autoScrollCase(){
+  const box = document.getElementById('caseList');
+  if(!box) return;
+  // 简单复制首行循环
+  setInterval(()=>{
+    if(box.scrollHeight - box.scrollTop - box.clientHeight < 5){
+      box.appendChild(box.children[0].cloneNode(true));
+    }
+    // 每次滚动1行（取首个高度）
+    const h = box.children[0]?.offsetHeight || 38;
+    let cur = 0;
+    const step = ()=>{
+      cur += 1;
+      box.scrollTop += 1;
+      if(cur < h) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, 3500);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市监方案局 · 市场监管行业方案展示</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   设计系统：极简杂志·纯白编辑风 (Editorial Minimal · Style B)
+   气质：纯白、Relume杂志感、大留白、Bento网格
+   ============================================================ */
+:root{
+  --bg:#fafafa;
+  --fg:#0a0a0a;
+  --fg-2:#525252;
+  --fg-3:#737373;
+  --accent:#2563eb;
+  --accent-light:#dbeafe;
+  --accent-soft:#eff6ff;
+  --border:#e5e5e5;
+  --border-2:#d4d4d4;
+  --card:#fff;
+  --dark:#0a0a0a;
+  --dark-2:#1a1a1a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Inter','Noto Sans SC','PingFang SC',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);color:var(--fg);line-height:1.5;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+.wrap{max-width:1280px;margin:0 auto;padding:0 48px}
+
+/* ---------- 1. 导航栏 ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(250,250,250,.72);backdrop-filter:blur(20px) saturate(1.8);
+  -webkit-backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s,box-shadow .3s,background .3s;
+}
+.nav.scrolled{
+  border-bottom-color:var(--border);
+  box-shadow:0 1px 0 rgba(0,0,0,.02),0 8px 24px -16px rgba(0,0,0,.08);
+  background:rgba(250,250,250,.85);
+}
+.nav-inner{max-width:1280px;margin:0 auto;padding:18px 48px;display:flex;align-items:center;gap:40px}
+.nav-logo{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;color:var(--fg)}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:28px;margin-left:24px}
+.nav-links a{font-size:.88rem;color:var(--fg-2);font-weight:500;transition:color .2s;position:relative}
+.nav-links a:hover{color:var(--fg)}
+.nav-links a::after{content:'';position:absolute;left:0;right:0;bottom:-6px;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .25s}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-btn{
+  margin-left:auto;padding:10px 20px;border-radius:10px;
+  background:var(--dark);color:#fff;font-size:.85rem;font-weight:600;
+  transition:transform .2s,box-shadow .2s;white-space:nowrap;
+}
+.nav-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(0,0,0,.4)}
+
+/* ---------- 2. Hero ---------- */
+.hero{padding:160px 0 100px}
+.hero-eyebrow{
+  font-size:.78rem;font-weight:600;letter-spacing:.18em;
+  color:var(--accent);text-transform:uppercase;margin-bottom:24px;
+}
+.hero-title{
+  font-size:4rem;font-weight:800;line-height:1.05;letter-spacing:-.03em;
+  margin-bottom:28px;max-width:920px;
+}
+.hero-title em{
+  font-style:normal;
+  background:linear-gradient(180deg,transparent 62%,var(--accent-light) 62%);
+  padding:0 2px;
+}
+.hero-sub{
+  font-size:1.15rem;color:var(--fg-2);max-width:620px;line-height:1.7;
+  margin-bottom:36px;
+}
+.hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.btn-primary{
+  padding:14px 28px;border-radius:10px;background:var(--dark);color:#fff;
+  font-weight:600;font-size:.9rem;transition:transform .2s,box-shadow .2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px -12px rgba(0,0,0,.4)}
+.btn-secondary{
+  padding:14px 28px;border-radius:10px;border:1px solid var(--border-2);
+  color:var(--fg);font-weight:600;font-size:.9rem;background:var(--card);
+  transition:all .2s;
+}
+.btn-secondary:hover{background:var(--fg);color:#fff;border-color:var(--fg)}
+.hero-logos{margin-top:96px;padding:36px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.logos-label{font-size:.75rem;color:var(--fg-3);letter-spacing:.1em;margin-bottom:22px;text-transform:uppercase}
+.logos-row{display:flex;gap:56px;align-items:center;opacity:.55;flex-wrap:wrap}
+.logos-row div{font-size:1.1rem;font-weight:700;color:var(--fg-2);letter-spacing:-.01em}
+
+/* ---------- 区域通用 ---------- */
+section{padding:96px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;gap:32px;flex-wrap:wrap}
+.sec-head-left{max-width:620px}
+.sec-tag{font-size:.78rem;font-weight:600;color:var(--accent);letter-spacing:.14em;margin-bottom:16px;text-transform:uppercase}
+.sec-title{font-size:2.6rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.sec-desc{font-size:.95rem;color:var(--fg-2);line-height:1.7;max-width:340px}
+
+/* ---------- 3. Bento 网格 ---------- */
+.bento{
+  display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:180px;gap:18px;
+}
+.bento > div{
+  border-radius:18px;padding:24px;border:1px solid var(--border);
+  background:var(--card);position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.2,.8,.2,1);cursor:pointer;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.bento > div:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.12);
+  border-color:var(--border-2);
+}
+.b-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.b-icon{font-size:1.6rem;line-height:1}
+.b-icon.sm{font-size:1.3rem}
+.b-cat{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--accent);text-transform:uppercase}
+.b-title{font-size:1.15rem;font-weight:700;line-height:1.3;margin-top:6px;letter-spacing:-.01em}
+.b-title.lg{font-size:1.6rem}
+.b-desc{font-size:.82rem;color:var(--fg-2);line-height:1.65;margin-top:8px}
+.b-desc.lg{font-size:.95rem;margin-top:10px}
+.b-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.b-tag{display:inline-flex;padding:4px 11px;border-radius:20px;background:rgba(0,0,0,.05);font-size:.68rem;font-weight:600;color:var(--fg-2)}
+.b-actions{display:flex;gap:8px;margin-top:14px}
+.b-btn-pri{padding:8px 14px;border-radius:8px;background:var(--dark);color:#fff;font-size:.74rem;font-weight:600;transition:transform .15s}
+.b-btn-pri:hover{transform:translateY(-1px)}
+.b-btn-sec{padding:8px 14px;border-radius:8px;border:1px solid var(--border);color:var(--fg);font-size:.74rem;font-weight:600;background:rgba(255,255,255,.6);transition:all .15s}
+.b-btn-sec:hover{background:var(--fg);color:#fff;border-color:var(--fg)}
+
+/* Bento 卡片尺寸 + 渐变 */
+.b1{grid-column:span 3;grid-row:span 2;background:linear-gradient(135deg,#eff6ff,#dbeafe 220%) !important;border-color:#bfdbfe !important}
+.b2{grid-column:span 3;grid-row:span 1}
+.b3{grid-column:span 2;grid-row:span 2}
+.b4{grid-column:span 2;grid-row:span 1;background:linear-gradient(135deg,#fef3c7,#fde68a 220%) !important;border-color:#fcd34d !important}
+.b5{grid-column:span 2;grid-row:span 1}
+.b6{grid-column:span 2;grid-row:span 1;background:linear-gradient(135deg,#dcfce7,#bbf7d0 220%) !important;border-color:#86efac !important}
+.b7{grid-column:span 2;grid-row:span 2;background:linear-gradient(135deg,#fce7f3,#fbcfe8 220%) !important;border-color:#f9a8d4 !important}
+.b8{grid-column:span 2;grid-row:span 1}
+.b9{grid-column:span 3;grid-row:span 1;background:linear-gradient(135deg,#ede9fe,#ddd6fe 220%) !important;border-color:#c4b5fd !important}
+.b10{grid-column:span 3;grid-row:span 1}
+
+/* ---------- 4. 案例流动高亮区 ---------- */
+.case-sec{background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:0 -9999px;padding-left:9999px;padding-right:9999px}
+.case-sec .wrap{padding:0}
+.case-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.case-spotlight{
+  position:absolute;width:380px;height:380px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(167,139,250,.28),transparent 60%);
+  filter:blur(24px);transition:opacity .25s;opacity:0;z-index:0;
+  transform:translate(-50%,-50%);left:0;top:0;
+}
+.case-card{
+  position:relative;z-index:1;padding:32px 28px;border-radius:20px;
+  background:var(--card);border:1px solid var(--border);cursor:pointer;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s;
+  overflow:hidden;display:flex;flex-direction:column;min-height:280px;
+}
+.case-card::before{
+  content:'';position:absolute;inset:0;border-radius:20px;
+  background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%),rgba(167,139,250,.14),transparent 42%);
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.case-card:hover{transform:translateY(-6px);border-color:#c4b5fd;box-shadow:0 24px 50px -24px rgba(124,58,237,.25)}
+.case-card:hover::before{opacity:1}
+.case-region{font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+.case-title{font-size:1.25rem;font-weight:700;line-height:1.35;margin-bottom:14px;letter-spacing:-.01em}
+.case-effect{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;background:rgba(37,99,235,.08);color:var(--accent);font-size:.78rem;font-weight:700;align-self:flex-start;margin-bottom:14px}
+.case-desc{font-size:.88rem;color:var(--fg-2);line-height:1.7;flex:1}
+.case-foot{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+.case-foot-l{font-size:.78rem;color:var(--fg-3);font-weight:500}
+.case-arrow{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .25s}
+.case-card:hover .case-arrow{background:var(--accent);color:#fff;border-color:var(--accent);transform:rotate(-45deg)}
+
+/* 案例 modal */
+.modal-mask{position:fixed;inset:0;background:rgba(10,10,10,.55);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .25s}
+.modal-mask.open{display:flex;opacity:1}
+.modal{
+  background:#fff;border-radius:24px;max-width:560px;width:100%;padding:40px;
+  transform:translateY(20px) scale(.98);transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  position:relative;max-height:88vh;overflow-y:auto;
+}
+.modal-mask.open .modal{transform:translateY(0) scale(1)}
+.modal-close{position:absolute;top:20px;right:20px;width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all .2s}
+.modal-close:hover{background:var(--fg);color:#fff;border-color:var(--fg)}
+.modal-region{font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.modal-title{font-size:1.8rem;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:18px}
+.modal-effect{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;background:rgba(37,99,235,.08);color:var(--accent);font-size:.85rem;font-weight:700;margin-bottom:22px}
+.modal-desc{font-size:.95rem;color:var(--fg-2);line-height:1.8;margin-bottom:24px}
+.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px;background:var(--bg);border-radius:14px}
+.modal-stat{text-align:center}
+.modal-stat-n{font-size:1.6rem;font-weight:800;color:var(--accent);letter-spacing:-.02em}
+.modal-stat-l{font-size:.72rem;color:var(--fg-3);margin-top:4px;font-weight:500}
+
+/* ---------- 5. 四大能力模块 ---------- */
+.cap-sec{padding:100px 0}
+.cap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.cap-card{
+  background:#fff;padding:40px 28px;transition:background .3s;cursor:pointer;
+  display:flex;flex-direction:column;min-height:340px;
+}
+.cap-card:hover{background:var(--bg)}
+.cap-num{font-size:.8rem;font-weight:700;color:#a3a3a3;margin-bottom:28px;letter-spacing:.1em}
+.cap-icon{font-size:2.2rem;margin-bottom:20px;line-height:1}
+.cap-title{font-size:1.3rem;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.cap-desc{font-size:.88rem;color:var(--fg-2);line-height:1.75;flex:1}
+.cap-more{font-size:.85rem;font-weight:600;margin-top:22px;display:inline-flex;gap:6px;align-items:center;padding-bottom:3px;border-bottom:2px solid var(--dark);align-self:flex-start;transition:gap .2s}
+.cap-card:hover .cap-more{gap:10px}
+
+/* ---------- 6. 专家咨询专区 ---------- */
+.expert-sec{padding:80px 0 100px}
+.expert-wrap{
+  background:linear-gradient(180deg,#0a0a0a 0%,#111 100%);
+  border-radius:32px;padding:64px 56px;color:#fff;position:relative;overflow:hidden;
+}
+.expert-wrap::before{
+  content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.18),transparent 60%);filter:blur(40px);pointer-events:none;
+}
+.expert-wrap::after{
+  content:'';position:absolute;bottom:-150px;left:-80px;width:450px;height:450px;border-radius:50%;
+  background:radial-gradient(circle,rgba(96,165,250,.12),transparent 60%);filter:blur(50px);pointer-events:none;
+}
+.expert-head{text-align:center;max-width:680px;margin:0 auto 56px;position:relative;z-index:2}
+.expert-eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.18em;color:#60a5fa;text-transform:uppercase;margin-bottom:18px}
+.expert-title{font-size:2.4rem;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:16px}
+.expert-sub{font-size:1rem;color:#a3a3a3;line-height:1.7}
+.expert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative;z-index:2}
+.expert-card{
+  background:var(--dark-2);border-radius:20px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);transition:border-color .35s,transform .35s;
+  display:flex;flex-direction:column;
+}
+.expert-card:hover{border-color:rgba(96,165,250,.4);transform:translateY(-4px)}
+.expert-photo-wrap{padding:18px 18px 0;perspective:800px}
+.expert-photo{
+  width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;
+  box-shadow:0 0 30px rgba(37,99,235,.3);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  animation:float 4s ease-in-out infinite;
+}
+.expert-card:hover .expert-photo{transform:perspective(800px) rotateY(-5deg) scale(1.03)}
+.expert-card:nth-child(2) .expert-photo{animation-delay:1s}
+.expert-card:nth-child(3) .expert-photo{animation-delay:2s}
+.expert-card:nth-child(4) .expert-photo{animation-delay:3s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.expert-card:hover .expert-photo{animation-play-state:paused}
+.expert-body{padding:22px 22px 26px;flex:1;display:flex;flex-direction:column}
+.expert-name{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:-.01em}
+.expert-role{font-size:.85rem;color:#60a5fa;margin-top:4px;font-weight:500}
+.expert-bio{font-size:.78rem;color:#a3a3a3;line-height:1.6;margin-top:8px;flex:1}
+.expert-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.expert-tag{font-size:.66rem;padding:4px 10px;border-radius:100px;background:rgba(255,255,255,.06);color:#d4d4d4;font-weight:500;border:1px solid rgba(255,255,255,.06)}
+.expert-btn{
+  margin-top:16px;padding:9px 16px;border-radius:10px;
+  border:1px solid rgba(96,165,250,.4);color:#60a5fa;font-size:.8rem;font-weight:600;
+  text-align:center;transition:all .25s;cursor:pointer;
+}
+.expert-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ---------- 7. 行业社区 ---------- */
+.comm-sec{padding:100px 0}
+.comm-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;gap:32px;flex-wrap:wrap}
+.comm-head-left{max-width:620px}
+.comm-join{padding:13px 26px;border-radius:10px;background:var(--dark);color:#fff;font-size:.88rem;font-weight:600;transition:transform .2s,box-shadow .2s}
+.comm-join:hover{transform:translateY(-2px);box-shadow:0 14px 28px -12px rgba(0,0,0,.4)}
+.comm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.comm-card{
+  background:var(--card);border-radius:16px;padding:24px;border:1px solid var(--border);
+  transition:transform .3s,box-shadow .3s,border-color .3s;cursor:pointer;
+  display:flex;flex-direction:column;
+}
+.comm-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px -20px rgba(0,0,0,.12);border-color:var(--border-2)}
+.comm-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.comm-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:#fff;flex-shrink:0}
+.comm-info{flex:1;min-width:0}
+.comm-name{font-size:.88rem;font-weight:700;color:var(--fg)}
+.comm-role{font-size:.72rem;color:var(--fg-3);font-weight:500}
+.comm-time{font-size:.72rem;color:var(--fg-3);font-weight:500;flex-shrink:0}
+.comm-msg{font-size:.88rem;color:var(--fg);line-height:1.7;margin-bottom:14px;flex:1}
+.comm-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.comm-tag{font-size:.68rem;padding:4px 10px;border-radius:100px;background:rgba(37,99,235,.08);color:var(--accent);font-weight:600}
+.comm-foot{display:flex;align-items:center;gap:18px;padding-top:14px;border-top:1px solid var(--border);font-size:.78rem;color:var(--fg-3);font-weight:500}
+
+/* ---------- 8. Footer ---------- */
+.footer{background:var(--dark);color:#a3a3a3;padding:80px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:60px;margin-bottom:60px}
+.footer-brand-logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:18px}
+.footer-brand-logo span{color:#60a5fa}
+.footer-brand-desc{font-size:.88rem;line-height:1.75;max-width:340px;margin-bottom:24px}
+.footer-social{display:flex;gap:12px}
+.footer-social a{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:background .2s}
+.footer-social a:hover{background:var(--accent)}
+.footer-col h4{font-size:.78rem;font-weight:700;color:#fff;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+.footer-col a{display:block;font-size:.88rem;color:#a3a3a3;margin-bottom:12px;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{padding-top:32px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.8rem}
+
+/* ---------- 滚动揭示动画 ---------- */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1024px){
+  .nav-links{display:none}
+  .hero-title{font-size:3rem}
+  .bento{grid-template-columns:repeat(4,1fr)}
+  .b1,.b2,.b9,.b10{grid-column:span 4}
+  .b3,.b7{grid-column:span 2}
+  .b4,.b5,.b6,.b8{grid-column:span 2}
+  .cap-grid{grid-template-columns:repeat(2,1fr)}
+  .expert-grid{grid-template-columns:repeat(2,1fr)}
+  .case-grid{grid-template-columns:repeat(2,1fr)}
+  .comm-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .wrap{padding:0 24px}
+  .nav-inner{padding:14px 24px}
+  .hero{padding:130px 0 60px}
+  .hero-title{font-size:2.4rem}
+  .hero-sub{font-size:1rem}
+  section{padding:64px 0}
+  .sec-title{font-size:2rem}
+  .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:160px}
+  .b1,.b2,.b3,.b4,.b5,.b6,.b7,.b8,.b9,.b10{grid-column:span 2;grid-row:span 1}
+  .b1,.b3,.b7{grid-row:span 2}
+  .cap-grid{grid-template-columns:1fr}
+  .expert-grid{grid-template-columns:1fr}
+  .case-grid{grid-template-columns:1fr}
+  .comm-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .expert-wrap{padding:48px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 1. 导航栏 ============ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">市监<span>方案</span>局</div>
+    <div class="nav-links">
+      <a href="#solutions">方案总览</a>
+      <a href="#cases">案例中心</a>
+      <a href="#capabilities">知识库</a>
+      <a href="#experts">专家咨询</a>
+      <a href="#capabilities">政策速递</a>
+      <a href="#capabilities">智能体</a>
+      <a href="#community">行业社区</a>
+    </div>
+    <a class="nav-btn" href="#experts">预约演示 →</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ 2. Hero ============ -->
+<section class="hero" id="top">
+  <div class="hero-eyebrow">MARKET REGULATION · SOLUTION CATALOG</div>
+  <h1 class="hero-title">让市场监管<em>数字化方案</em><br>像翻阅杂志一样优雅。</h1>
+  <p class="hero-sub">10 大核心场景方案，从顶层规划到落地实施，从 AI 模型到业务闭环，我们提供售前经理所需的一切表达工具。</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="#solutions">浏览全部方案</a>
+    <a class="btn-secondary" href="#cases">观看 2 分钟介绍</a>
+  </div>
+  <div class="hero-logos">
+    <div class="logos-label">已服务全国客户</div>
+    <div class="logos-row">
+      <div>国家市监总局</div>
+      <div>浙江省局</div>
+      <div>江苏省局</div>
+      <div>海南省局</div>
+      <div>广东省局</div>
+      <div>山东省局</div>
+      <div>河南省局</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 方案概览 — Bento 网格 ============ -->
+<section id="solutions">
+  <div class="sec-head reveal">
+    <div class="sec-head-left">
+      <div class="sec-tag">全部方案 · ALL SOLUTIONS</div>
+      <h2 class="sec-title">一个页面看完<br>全行业业务版图。</h2>
+    </div>
+    <p class="sec-desc">Bento 网格化呈现，信息层级分明，大小卡片错落排布，鼠标悬停即刻感受方案张力。</p>
+  </div>
+
+  <div class="bento reveal">
+    <!-- 卡片1：AI智慧审批（大卡片） -->
+    <div class="b1">
+      <div class="b-top">
+        <div class="b-icon">📋</div>
+        <span class="b-tag">🏷️ 登记审批</span>
+      </div>
+      <div>
+        <div class="b-cat">登记审批 · APPROVAL</div>
+        <div class="b-title lg">AI 智慧审批 · 秒级秒批</div>
+        <div class="b-desc lg">OCR + 大模型双引擎驱动，材料自动核验、表单智能填报、风险秒级预警，让窗口审批效率提升 5 倍。</div>
+        <div class="b-tags">
+          <span class="b-tag">OCR识别</span>
+          <span class="b-tag">智能表单</span>
+          <span class="b-tag">风险预警</span>
+          <span class="b-tag">LLM</span>
+        </div>
+        <div class="b-actions">
+          <a class="b-btn-pri" href="pdfs/02_smart_admin_approval.pdf" target="_blank" rel="noopener">演示 Demo</a>
+          <a class="b-btn-sec" href="pdfs/02_smart_admin_approval.pdf" target="_blank" rel="noopener">方案详情</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片2：NQI一站式（中卡片） -->
+    <div class="b2">
+      <div>
+        <div class="b-cat">质量 · NQI</div>
+        <div class="b-title">NQI 一站式服务</div>
+        <div class="b-desc">计量 / 标准 / 认证 / 认可 / 检验检测全要素打通，企业办事只进一门一窗通办。</div>
+      </div>
+      <div class="b-actions">
+        <a class="b-btn-pri" href="pdfs/10_nqi_one_stop.pdf" target="_blank" rel="noopener">演示 Demo</a>
+        <a class="b-btn-sec" href="pdfs/10_nqi_one_stop.pdf" target="_blank" rel="noopener">方案详情</a>
+      </div>
+    </div>
+
+    <!-- 卡片3：食品溯源（中卡片） -->
+    <div class="b3">
+      <div class="b-top">
+        <div class="b-icon">🥩</div>
+        <div class="b-cat">食品</div>
+      </div>
+      <div>
+        <div class="b-title">食品安全产业链溯源</div>
+        <div class="b-desc">种养→生产→流通→消费全链路区块链上链存证，扫码一键溯源，问题食品分钟级召回。</div>
+        <div class="b-tags">
+          <span class="b-tag">区块链</span>
+          <span class="b-tag">全链路</span>
+          <span class="b-tag">扫码溯源</span>
+        </div>
+        <div class="b-actions">
+          <a class="b-btn-pri" href="pdfs/03_food_traceability.pdf" target="_blank" rel="noopener">演示 Demo</a>
+          <a class="b-btn-sec" href="pdfs/03_food_traceability.pdf" target="_blank" rel="noopener">方案详情</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片4：工业产品质量（小卡片，黄色） -->
+    <div class="b4">
+      <div>
+        <div class="b-icon sm">🏭</div>
+        <div class="b-cat">质量</div>
+        <div class="b-title">工业产品质量监管</div>
+      </div>
+      <div class="b-actions">
+        <a class="b-btn-pri" href="pdfs/07_industrial_product_quality.pdf" target="_blank" rel="noopener">演示 Demo</a>
+        <a class="b-btn-sec" href="pdfs/07_industrial_product_quality.pdf" target="_blank" rel="noopener">详情</a>
+      </div>
+    </div>
+
+    <!-- 卡片5：智慧药监（小卡片） -->
+    <div class="b5">
+      <div>
+        <div class="b-icon sm">💊</div>
+        <div class="b-cat">药品</div>
+        <div class="b-title">智慧药监</div>
+      </div>
+      <div class="b-actions">
+        <a class="b-btn-pri" href="pdfs/09_drug_inspection.pdf" target="_blank" rel="noopener">演示 Demo</a>
+        <a class="b-btn-sec" href="pdfs/09_drug_inspection.pdf" target="_blank" rel="noopener">详情</a>
+      </div>
+    </div>
+
+    <!-- 卡片6：水电气公用事业（小卡片，绿色） -->
+    <div class="b6">
+      <div>
+        <div class="b-icon sm">💧</div>
+        <div class="b-cat">公用事业</div>
+        <div class="b-title">水电气公用事业监管</div>
+      </div>
+      <div class="b-actions">
+        <a class="b-btn-pri" href="pdfs/01_water_gas_electricity.pdf" target="_blank" rel="noopener">演示 Demo</a>
+        <a class="b-btn-sec" href="pdfs/01_water_gas_electricity.pdf" target="_blank" rel="noopener">详情</a>
+      </div>
+    </div>
+
+    <!-- 卡片7：食品AI监管（中卡片，粉色） -->
+    <div class="b7">
+      <div class="b-top">
+        <div class="b-icon">🤖</div>
+        <div class="b-cat">食品 · AI</div>
+      </div>
+      <div>
+        <div class="b-title">食品互联网 + AI 监管</div>
+        <div class="b-desc">明厨亮灶智能视觉分析，后厨违规行为自动抓拍预警，24h 无人值守。</div>
+        <div class="b-tags">
+          <span class="b-tag">视觉识别</span>
+          <span class="b-tag">明厨亮灶</span>
+          <span class="b-tag">24h值守</span>
+        </div>
+        <div class="b-actions">
+          <a class="b-btn-pri" href="pdfs/04_food_ai_safety.pdf" target="_blank" rel="noopener">演示 Demo</a>
+          <a class="b-btn-sec" href="pdfs/04_food_ai_safety.pdf" target="_blank" rel="noopener">方案详情</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片8：行政执法（小卡片） -->
+    <div class="b8">
+      <div>
+        <div class="b-icon sm">⚖️</div>
+        <div class="b-cat">执法</div>
+        <div class="b-title">行政执法监管</div>
+      </div>
+      <div class="b-actions">
+        <a class="b-btn-pri" href="pdfs/06_administrative_enforcement.pdf" target="_blank" rel="noopener">演示 Demo</a>
+        <a class="b-btn-sec" href="pdfs/06_administrative_enforcement.pdf" target="_blank" rel="noopener">详情</a>
+      </div>
+    </div>
+
+    <!-- 卡片9：网络直播监测（中卡片，紫色） -->
+    <div class="b9">
+      <div>
+        <div class="b-icon sm">📺</div>
+        <div class="b-cat">新业态 · LIVESTREAM</div>
+        <div class="b-title">网络直播监测监管</div>
+        <div class="b-desc">直播画面 ASR + 视觉双模态分析，违规带货秒级识别，电子证据自动固化。</div>
+      </div>
+      <div class="b-actions">
+        <a class="b-btn-pri" href="pdfs/08_livestream_monitoring.pdf" target="_blank" rel="noopener">演示 Demo</a>
+        <a class="b-btn-sec" href="pdfs/08_livestream_monitoring.pdf" target="_blank" rel="noopener">方案详情</a>
+      </div>
+    </div>
+
+    <!-- 卡片10：成品油监管（中卡片） -->
+    <div class="b10">
+      <div>
+        <div class="b-icon sm">🛢️</div>
+        <div class="b-cat">计量 · METROLOGY</div>
+        <div class="b-title">成品油监管</div>
+        <div class="b-desc">加油机物联网 + 质量快检 + 溯源码三位一体，全链路数据上链不可篡改。</div>
+      </div>
+      <div class="b-actions">
+        <a class="b-btn-pri" href="pdfs/05_refined_oil.pdf" target="_blank" rel="noopener">演示 Demo</a>
+        <a class="b-btn-sec" href="pdfs/05_refined_oil.pdf" target="_blank" rel="noopener">方案详情</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.wrap -->
+
+<!-- ============ 4. 案例展示区 — 流动高亮 ============ -->
+<section class="case-sec" id="cases">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head-left">
+        <div class="sec-tag">客户案例 · CUSTOMER STORIES</div>
+        <h2 class="sec-title">一线落地的<br>真实数字成果。</h2>
+      </div>
+      <p class="sec-desc">鼠标在网格内移动，感受流动高亮跟随指尖，点击任意卡片解锁案例详情。</p>
+    </div>
+
+    <div class="case-grid reveal" id="caseGrid">
+      <div class="case-spotlight" id="caseSpotlight"></div>
+
+      <div class="case-card" data-case="0">
+        <div class="case-region">浙江省局 · APPROVAL</div>
+        <div class="case-title">AI 智慧审批</div>
+        <div class="case-effect">⚡ 审批时效 ↑5倍</div>
+        <div class="case-desc">OCR 识别率 99.8%，日均处理审批件 500+，风险预警准确率 97%。</div>
+        <div class="case-foot"><span class="case-foot-l">查看案例详情</span><span class="case-arrow">→</span></div>
+      </div>
+
+      <div class="case-card" data-case="1">
+        <div class="case-region">江苏省局 · METROLOGY</div>
+        <div class="case-title">成品油监管</div>
+        <div class="case-effect">📉 计量作弊 ↓90%</div>
+        <div class="case-desc">300+ 加油站物联覆盖，数据上链不可篡改，质量异常实时预警。</div>
+        <div class="case-foot"><span class="case-foot-l">查看案例详情</span><span class="case-arrow">→</span></div>
+      </div>
+
+      <div class="case-card" data-case="2">
+        <div class="case-region">海南省局 · FOOD</div>
+        <div class="case-title">食品溯源</div>
+        <div class="case-effect">⏱ 召回时间 ↓80%</div>
+        <div class="case-desc">全链路区块链存证，扫码溯源覆盖 10 万+ 商户，问题食品分钟级定位。</div>
+        <div class="case-foot"><span class="case-foot-l">查看案例详情</span><span class="case-arrow">→</span></div>
+      </div>
+
+      <div class="case-card" data-case="3">
+        <div class="case-region">广东省局 · FOOD AI</div>
+        <div class="case-title">明厨亮灶 AI</div>
+        <div class="case-effect">📉 违规行为 ↓65%</div>
+        <div class="case-desc">后厨 AI 视觉 12 类违规识别，24h 无人值守，日均抓拍预警 200+。</div>
+        <div class="case-foot"><span class="case-foot-l">查看案例详情</span><span class="case-arrow">→</span></div>
+      </div>
+
+      <div class="case-card" data-case="4">
+        <div class="case-region">山东省局 · ELEVATOR</div>
+        <div class="case-title">电梯智慧监管</div>
+        <div class="case-effect">⏱ 救援响应 ↓80%</div>
+        <div class="case-desc">5000+ 电梯物联覆盖，故障预测准确率 92%，困人救援平均 8 分钟。</div>
+        <div class="case-foot"><span class="case-foot-l">查看案例详情</span><span class="case-arrow">→</span></div>
+      </div>
+
+      <div class="case-card" data-case="5">
+        <div class="case-region">河南省局 · ENFORCEMENT</div>
+        <div class="case-title">行政执法数字化</div>
+        <div class="case-effect">⚡ 办案效率 ↑40%</div>
+        <div class="case-desc">移动办案全覆盖，文书智能生成率 90%，执法全过程留痕。</div>
+        <div class="case-foot"><span class="case-foot-l">查看案例详情</span><span class="case-arrow">→</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+<!-- ============ 5. 四大能力模块 ============ -->
+<section class="cap-sec" id="capabilities">
+  <div class="sec-head reveal">
+    <div class="sec-head-left">
+      <div class="sec-tag">四大能力 · FOUR CAPABILITIES</div>
+      <h2 class="sec-title">不止方案库<br>更是售前经理的工作伙伴。</h2>
+    </div>
+    <p class="sec-desc">从知识沉淀到专家智慧，从政策洞察到智能工作流，提供售前经理完整的工作底座。</p>
+  </div>
+
+  <div class="cap-grid reveal">
+    <div class="cap-card">
+      <div class="cap-num">/ 01</div>
+      <div class="cap-icon">📚</div>
+      <div class="cap-title">市监业务知识库</div>
+      <div class="cap-desc">法规库 · 文书库 · 判例库 · 政策库，四库合一的语义检索大脑。百万级语料训练的行业大模型，政策问答、文书生成、案例参考无所不能。</div>
+      <a class="cap-more" href="#">进入探索 <span>→</span></a>
+    </div>
+    <div class="cap-card">
+      <div class="cap-num">/ 02</div>
+      <div class="cap-icon">👥</div>
+      <div class="cap-title">专家咨询服务</div>
+      <div class="cap-desc">资深行业专家一对一在线答疑，三维形象实时互动展示，咨询过程有温度更有专业度。疑难杂症不出系统。</div>
+      <a class="cap-more" href="#experts">预约咨询 <span>→</span></a>
+    </div>
+    <div class="cap-card">
+      <div class="cap-num">/ 03</div>
+      <div class="cap-icon">📢</div>
+      <div class="cap-title">每日政策推送</div>
+      <div class="cap-desc">政策大模型每日 8 点前完成全网政策抓取与解读，按你订阅的岗位标签精准推送洞察报告。再也不遗漏关键政策。</div>
+      <a class="cap-more" href="#">立即订阅 <span>→</span></a>
+    </div>
+    <div class="cap-card">
+      <div class="cap-num">/ 04</div>
+      <div class="cap-icon">🧠</div>
+      <div class="cap-title">市监智能体</div>
+      <div class="cap-desc">多智能体协作工作流，线索发现智能体、证据固定智能体、文书生成智能体协同工作。自动完成复杂业务闭环。</div>
+      <a class="cap-more" href="#">启动工作流 <span>→</span></a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.wrap -->
+
+<!-- ============ 6. 专家咨询专区 ============ -->
+<section class="expert-sec" id="experts">
+  <div class="wrap">
+    <div class="expert-wrap reveal">
+      <div class="expert-head">
+        <div class="expert-eyebrow">EXPERT CONSULTATION · 专家在线</div>
+        <h2 class="expert-title">行业顶尖专家 · 为你实时在线</h2>
+        <p class="expert-sub">资深市监行业专家团队，覆盖审批、食品、药品、执法、质量全领域。</p>
+      </div>
+
+      <div class="expert-grid">
+        <div class="expert-card">
+          <div class="expert-photo-wrap">
+            <img class="expert-photo" src="experts/ma_qi.png" alt="马骐">
+          </div>
+          <div class="expert-body">
+            <div class="expert-name">马骐</div>
+            <div class="expert-role">售前解决方案总监</div>
+            <div class="expert-bio">10年+ 市场监管信息化经验</div>
+            <div class="expert-tags">
+              <span class="expert-tag">方案架构</span>
+              <span class="expert-tag">售前咨询</span>
+              <span class="expert-tag">顶层设计</span>
+            </div>
+            <div class="expert-btn">连线咨询 →</div>
+          </div>
+        </div>
+
+        <div class="expert-card">
+          <div class="expert-photo-wrap">
+            <img class="expert-photo" src="experts/jiang_yuheng.png" alt="姜宇恒">
+          </div>
+          <div class="expert-body">
+            <div class="expert-name">姜宇恒</div>
+            <div class="expert-role">行业咨询专家</div>
+            <div class="expert-bio">食品药品监管领域资深顾问</div>
+            <div class="expert-tags">
+              <span class="expert-tag">食品药品</span>
+              <span class="expert-tag">合规审计</span>
+              <span class="expert-tag">行业咨询</span>
+            </div>
+            <div class="expert-btn">连线咨询 →</div>
+          </div>
+        </div>
+
+        <div class="expert-card">
+          <div class="expert-photo-wrap">
+            <img class="expert-photo" src="experts/ni_weichi.png" alt="倪未弛">
+          </div>
+          <div class="expert-body">
+            <div class="expert-name">倪未弛</div>
+            <div class="expert-role">解决方案架构师</div>
+            <div class="expert-bio">AI + 大数据技术架构专家</div>
+            <div class="expert-tags">
+              <span class="expert-tag">AI架构</span>
+              <span class="expert-tag">大数据</span>
+              <span class="expert-tag">智能体设计</span>
+            </div>
+            <div class="expert-btn">连线咨询 →</div>
+          </div>
+        </div>
+
+        <div class="expert-card">
+          <div class="expert-photo-wrap">
+            <img class="expert-photo" src="experts/zhang_ze.png" alt="张泽">
+          </div>
+          <div class="expert-body">
+            <div class="expert-name">张泽</div>
+            <div class="expert-role">高级产品经理</div>
+            <div class="expert-bio">政务产品设计与用户体验</div>
+            <div class="expert-tags">
+              <span class="expert-tag">产品设计</span>
+              <span class="expert-tag">用户体验</span>
+              <span class="expert-tag">需求分析</span>
+            </div>
+            <div class="expert-btn">连线咨询 →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+<!-- ============ 7. 行业社区 ============ -->
+<section class="comm-sec" id="community">
+  <div class="comm-head reveal">
+    <div class="comm-head-left">
+      <div class="sec-tag">行业社区 · COMMUNITY</div>
+      <h2 class="sec-title">来自一线的声音<br>共建市监生态。</h2>
+      <p class="sec-desc" style="max-width:520px;margin-top:18px">全行业信息化人聚集地，分享方案、讨论痛点、共建下一代市监能力底座。</p>
+    </div>
+    <a class="comm-join" href="#">加入社区 →</a>
+  </div>
+
+  <div class="comm-grid reveal">
+    <div class="comm-card">
+      <div class="comm-top">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#2563eb,#60a5fa)">马</div>
+        <div class="comm-info">
+          <div class="comm-name">马骐</div>
+          <div class="comm-role">售前总监</div>
+        </div>
+        <div class="comm-time">3小时前</div>
+      </div>
+      <div class="comm-msg">建议在电梯智慧监管里增加"老旧电梯改造评估"模块，结合维保数据 + 运行数据给出改造优先级排序，很多市局都在找这个能力的方案。</div>
+      <div class="comm-tags"><span class="comm-tag">#电梯</span><span class="comm-tag">#需求建议</span></div>
+      <div class="comm-foot"><span>❤ 128</span><span>💬 37</span></div>
+    </div>
+
+    <div class="comm-card">
+      <div class="comm-top">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#0891b2,#22d3ee)">姜</div>
+        <div class="comm-info">
+          <div class="comm-name">姜宇恒</div>
+          <div class="comm-role">行业咨询</div>
+        </div>
+        <div class="comm-time">昨天</div>
+      </div>
+      <div class="comm-msg">NQI 一站式和"企业信用风险分类监管"结合是一个很好的组合拳——根据企业信用画像自动推荐 NQI 服务包，精准帮扶企业，给领导汇报非常好讲。</div>
+      <div class="comm-tags"><span class="comm-tag">#NQI</span><span class="comm-tag">#信用监管</span></div>
+      <div class="comm-foot"><span>❤ 256</span><span>💬 58</span></div>
+    </div>
+
+    <div class="comm-card">
+      <div class="comm-top">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#7c3aed,#a78bfa)">倪</div>
+        <div class="comm-info">
+          <div class="comm-name">倪未弛</div>
+          <div class="comm-role">解决方案架构师</div>
+        </div>
+        <div class="comm-time">2天前</div>
+      </div>
+      <div class="comm-msg">直播监管现在客户都在问 AI 生成内容（AIGC）带货的识别能力，建议下一版增加 Deepfake 检测和 AI 口播内容的语义鉴伪，这会是明年的大卖点。</div>
+      <div class="comm-tags"><span class="comm-tag">#直播监管</span><span class="comm-tag">#AIGC</span><span class="comm-tag">#创新</span></div>
+      <div class="comm-foot"><span>❤ 341</span><span>💬 82</span></div>
+    </div>
+
+    <div class="comm-card">
+      <div class="comm-top">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#059669,#34d399)">张</div>
+        <div class="comm-info">
+          <div class="comm-name">张泽</div>
+          <div class="comm-role">产品经理</div>
+        </div>
+        <div class="comm-time">3天前</div>
+      </div>
+      <div class="comm-msg">和大家分享一个新方向：行政执法 + AR 眼镜，现场检查时 AR 识别主体信息、证照状态、风险等级直接叠加在视野里，演示效果非常炸。</div>
+      <div class="comm-tags"><span class="comm-tag">#执法</span><span class="comm-tag">#AR</span><span class="comm-tag">#黑科技</span></div>
+      <div class="comm-foot"><span>❤ 487</span><span>💬 103</span></div>
+    </div>
+
+    <div class="comm-card">
+      <div class="comm-top">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#d97706,#fbbf24)">李</div>
+        <div class="comm-info">
+          <div class="comm-name">李主任</div>
+          <div class="comm-role">某市局副局长</div>
+        </div>
+        <div class="comm-time">5天前</div>
+      </div>
+      <div class="comm-msg">作为一线用户，希望知识库能增加"场景化问答"，比如我输入"校园周边食品安全专项整治方案"，直接给我一套可落地的材料包 + 检查清单 + 文书模板。</div>
+      <div class="comm-tags"><span class="comm-tag">#知识库</span><span class="comm-tag">#用户体验</span></div>
+      <div class="comm-foot"><span>❤ 612</span><span>💬 156</span></div>
+    </div>
+
+    <div class="comm-card">
+      <div class="comm-top">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#db2777,#f472b6)">王</div>
+        <div class="comm-info">
+          <div class="comm-name">王工</div>
+          <div class="comm-role">数据工程师</div>
+        </div>
+        <div class="comm-time">上周</div>
+      </div>
+      <div class="comm-msg">成品油监管建议把"税务发票数据"做交叉比对——加油机销售量和发票开具量不一致，很大概率就是计量作弊或偷税漏税。</div>
+      <div class="comm-tags"><span class="comm-tag">#成品油</span><span class="comm-tag">#数据协同</span><span class="comm-tag">#干货</span></div>
+      <div class="comm-foot"><span>❤ 298</span><span>💬 67</span></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.wrap -->
+
+<!-- ============ 8. Footer ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">市监<span>方案</span>局</div>
+        <p class="footer-brand-desc">市场监管行业数字化方案展示与售前协作平台，覆盖 10 大核心场景，提供方案库、知识库、专家咨询、智能体一站式能力底座。</p>
+        <div class="footer-social">
+          <a href="#" aria-label="微信">💬</a>
+          <a href="#" aria-label="邮箱">✉️</a>
+          <a href="#" aria-label="GitHub">⌨️</a>
+          <a href="#" aria-label="链接">🔗</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>快速链接</h4>
+        <a href="#solutions">方案总览</a>
+        <a href="#cases">案例中心</a>
+        <a href="#capabilities">四大能力</a>
+        <a href="#experts">专家咨询</a>
+        <a href="#community">行业社区</a>
+      </div>
+      <div class="footer-col">
+        <h4>联系我们</h4>
+        <a href="mailto:contact@market-solution.cn">contact@market-solution.cn</a>
+        <a href="tel:400-888-0000">400-888-0000</a>
+        <a href="#">北京市海淀区中关村软件园</a>
+        <a href="#top">回到顶部 ↑</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 市监方案局 · Market Regulation Solution Catalog. All rights reserved.</div>
+      <div>隐私政策 · 服务条款 · 京ICP备 2026000000号</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ 案例 Modal ============ -->
+<div class="modal-mask" id="caseModal">
+  <div class="modal" id="modalContent">
+    <div class="modal-close" id="modalClose">✕</div>
+    <div class="modal-region" id="mRegion"></div>
+    <h3 class="modal-title" id="mTitle"></h3>
+    <div class="modal-effect" id="mEffect"></div>
+    <p class="modal-desc" id="mDesc"></p>
+    <div class="modal-stats" id="mStats"></div>
+  </div>
+</div>
+
+<script>
+/* ============ 导航栏滚动效果 ============ */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 20) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+}, {passive:true});
+
+/* ============ 案例流动高亮 ============ */
+const caseGrid = document.getElementById('caseGrid');
+const spotlight = document.getElementById('caseSpotlight');
+const caseCards = document.querySelectorAll('.case-card');
+
+caseGrid.addEventListener('mousemove', e => {
+  const r = caseGrid.getBoundingClientRect();
+  spotlight.style.left = (e.clientX - r.left) + 'px';
+  spotlight.style.top = (e.clientY - r.top) + 'px';
+  spotlight.style.opacity = 1;
+});
+caseGrid.addEventListener('mouseleave', () => {
+  spotlight.style.opacity = 0;
+});
+caseCards.forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+  });
+});
+
+/* ============ 案例详情 Modal ============ */
+const caseData = [
+  {
+    region:'浙江省局 · AI 智慧审批',
+    title:'浙江省局 AI 智慧审批',
+    effect:'⚡ 审批时效 ↑5倍',
+    desc:'浙江省市场监督管理局联合打造 AI 智慧审批平台，以 OCR + 大模型双引擎驱动，实现申报材料自动识别、表单智能填报、合规要素自动比对、风险秒级预警。窗口审批从平均 3 个工作日压缩至 4 小时内，群众办事"零跑腿、零材料、秒批秒办"。',
+    stats:[{n:'99.8%',l:'OCR识别率'},{n:'500+',l:'日均处理件'},{n:'97%',l:'风险预警准确率'}]
+  },
+  {
+    region:'江苏省局 · 成品油监管',
+    title:'江苏省局 成品油监管',
+    effect:'📉 计量作弊 ↓90%',
+    desc:'江苏省市场监督管理局部署成品油全链路智慧监管平台，300+ 加油站全部物联覆盖，加油机流量、温度、密度数据实时上链不可篡改。结合质量快检与溯源码管理，计量作弊行为下降 90%，问题油品可在 30 分钟内定位至具体加油机。',
+    stats:[{n:'300+',l:'加油站覆盖'},{n:'90%',l:'作弊下降率'},{n:'30min',l:'问题定位时长'}]
+  },
+  {
+    region:'海南省局 · 食品溯源',
+    title:'海南省局 食品溯源',
+    effect:'⏱ 召回时间 ↓80%',
+    desc:'海南省市场监督管理局构建食品安全产业链区块链溯源平台，覆盖种养殖、生产、流通、餐饮全环节。10 万+ 商户扫码上链，问题食品从发现到完成召回平均时间由 48 小时压缩至 9.6 小时，群众扫码即可查看食品"前世今生"。',
+    stats:[{n:'10万+',l:'商户覆盖'},{n:'80%',l:'召回提速'},{n:'9.6h',l:'平均召回时长'}]
+  },
+  {
+    region:'广东省局 · 明厨亮灶 AI',
+    title:'广东省局 明厨亮灶 AI',
+    effect:'📉 违规行为 ↓65%',
+    desc:'广东省市场监督管理局上线明厨亮灶 AI 视觉监管平台，对接 2 万+ 餐饮单位后厨视频流，AI 模型自动识别未戴帽子、抽烟、玩手机、老鼠出没等 12 类违规行为，24h 无人值守，日均抓拍预警 200+ 起，后厨违规行为下降 65%。',
+    stats:[{n:'2万+',l:'餐饮覆盖'},{n:'12类',l:'违规识别'},{n:'200+',l:'日均预警'}]
+  },
+  {
+    region:'山东省局 · 电梯智慧监管',
+    title:'山东省局 电梯智慧监管',
+    effect:'⏱ 救援响应 ↓80%',
+    desc:'山东省市场监督管理局打造电梯物联网智慧监管平台，5000+ 电梯全部接入物联感知设备，实时采集运行数据。AI 故障预测模型准确率 92%，可在故障发生前 48 小时预警。困人救援平均响应时间由 40 分钟压缩至 8 分钟。',
+    stats:[{n:'5000+',l:'电梯覆盖'},{n:'92%',l:'预测准确率'},{n:'8min',l:'救援响应'}]
+  },
+  {
+    region:'河南省局 · 行政执法数字化',
+    title:'河南省局 行政执法数字化',
+    effect:'⚡ 办案效率 ↑40%',
+    desc:'河南省市场监督管理局推行行政执法全流程数字化办案体系，移动办案终端覆盖全省执法力量，大模型自动生成法律文书，区块链固化电子证据。文书智能生成率达 90%，办案效率提升 40%，执法全过程留痕可追溯。',
+    stats:[{n:'90%',l:'文书生成率'},{n:'40%',l:'效率提升'},{n:'100%',l:'过程留痕'}]
+  }
+];
+
+const modalMask = document.getElementById('caseModal');
+const mRegion = document.getElementById('mRegion');
+const mTitle = document.getElementById('mTitle');
+const mEffect = document.getElementById('mEffect');
+const mDesc = document.getElementById('mDesc');
+const mStats = document.getElementById('mStats');
+
+function openModal(idx){
+  const d = caseData[idx];
+  if(!d) return;
+  mRegion.textContent = d.region;
+  mTitle.textContent = d.title;
+  mEffect.textContent = d.effect;
+  mDesc.textContent = d.desc;
+  mStats.innerHTML = d.stats.map(s => `<div class="modal-stat"><div class="modal-stat-n">${s.n}</div><div class="modal-stat-l">${s.l}</div></div>`).join('');
+  modalMask.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modalMask.classList.remove('open');
+  document.body.style.overflow = '';
+}
+caseCards.forEach(card => {
+  card.addEventListener('click', () => openModal(parseInt(card.dataset.case, 10)));
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalMask.addEventListener('click', e => { if(e.target === modalMask) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+/* ============ 滚动揭示动画 ============ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if(en.isIntersecting){
+      en.target.classList.add('visible');
+      io.unobserve(en.target);
+    }
+  });
+}, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ============ 专家按钮提示 ============ */
+document.querySelectorAll('.expert-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const card = btn.closest('.expert-card');
+    const name = card.querySelector('.expert-name').textContent;
+    btn.textContent = '已发送邀请 ✓';
+    btn.style.background = '#2563eb';
+    btn.style.color = '#fff';
+    btn.style.borderColor = '#2563eb';
+    setTimeout(() => {
+      btn.textContent = '连线咨询 →';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2000);
+  });
+});
+</script>
+</body>
+</html>
