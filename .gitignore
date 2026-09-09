@@ -1,0 +1,27 @@
+# 备份目录
+backup_*/
+
+# 临时截图
+screenshots/
+
+# Trae 分享包
+.trae-html-share-packages/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 日志
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# 系统
+.DS_Store
+Thumbs.db
